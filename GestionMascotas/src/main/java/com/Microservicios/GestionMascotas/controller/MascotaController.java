@@ -37,7 +37,7 @@ public class MascotaController {
         return ResponseEntity.ok("Registrado con exito");
     }
 
-    // GET /usuarios/{id}
+    // GET /mascota/{id}
     @GetMapping("/{idMascota}")
     public ResponseEntity<Mascotas> obtenerUsuario(@PathVariable Integer idMascota) {
         Mascotas mascotas = mascotaService.obtenerMascotas(idMascota);
