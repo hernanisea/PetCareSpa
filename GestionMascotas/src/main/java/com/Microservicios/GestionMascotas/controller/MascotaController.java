@@ -20,7 +20,7 @@ import com.Microservicios.GestionMascotas.service.MascotaService;
 @RequestMapping("/api/v1/mascotas")
 public class MascotaController {
 
-     @Autowired
+    @Autowired
     private MascotaService mascotaService;
 
     // POST 
@@ -48,7 +48,7 @@ public class MascotaController {
         }
     }
 
-    // PUT /usuarios/{id}
+    
     @PutMapping("/{idMascota}")
     public ResponseEntity<Mascotas> mascotaActualizado(@PathVariable Integer idMascota, @RequestBody Mascotas mascotaActualizada) {
             Mascotas mascotaActualizado = mascotaService.mascotaActualizado(idMascota, mascotaActualizada);
@@ -59,14 +59,14 @@ public class MascotaController {
         }
     }
 
-    // DELETE /usuarios/{id}
+    
     @DeleteMapping("/{idMascota}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Integer idMascota) {
         mascotaService.eliminarMascotas(idMascota);
         return ResponseEntity.noContent().build();
     }
 
-    // GET /usuarios
+    
     @GetMapping
     public ResponseEntity<List<Mascotas>> listarMascotas() {
         List<Mascotas> mascotas = mascotaService.listarMascotas();
@@ -75,4 +75,5 @@ public class MascotaController {
         }
         return ResponseEntity.ok(mascotas);
     }
+    
 }
