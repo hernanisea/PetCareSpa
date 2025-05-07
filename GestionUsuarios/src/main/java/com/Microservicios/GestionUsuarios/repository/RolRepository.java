@@ -1,10 +1,10 @@
 package com.Microservicios.GestionUsuarios.repository;
 
-import com.Microservicios.GestionUsuarios.model.Usuario;
+import com.Microservicios.GestionUsuarios.model.Rol;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Usuario findByUsername(String username);
+public interface RolRepository extends JpaRepository<Rol, Long> {
+    Rol findByNombreRol(String nombreRol);
 }

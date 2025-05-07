@@ -1,14 +1,11 @@
 package com.Microservicios.GestionUsuarios.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "usuario")
 @Data
@@ -18,22 +15,19 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer IdUsuario;
+    private Long id;
 
-    @Column(length = 100, nullable = false, unique = true)
-    private String nombreCompleto;
-    
-    @Column(length = 200, nullable = false)
-    private String correo;
+    @Column(nullable = false, unique = true, length = 50)
+    private String username;
 
-    @Column(nullable= false)
-    private String passwordHash;
+    @Column(nullable = false)
+    private String password;
 
-    @Column(length = 20, nullable = false)
-    private String rol;//cliente, veterinario, admin
-    
-    @Column(length = 15,nullable = true)
+    @Column(length = 15)
     private String telefono;
 
-
+    @ManyToOne
+    @JoinColumn(name = "rol_id", nullable = false)
+    @JsonIgnoreProperties("usuario")
+    private Rol rol;
 }
