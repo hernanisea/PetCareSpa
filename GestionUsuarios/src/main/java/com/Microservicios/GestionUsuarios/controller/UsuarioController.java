@@ -9,37 +9,73 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/v1/usuarios")
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 
+    private final UsuarioService usuarioService;
+
     @Autowired
-    private UsuarioService usuarioService;
-
-    @PostMapping("/registro")
-    public ResponseEntity<Usuario> registrar(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(201).body(usuarioService.agregarUsuario(usuario));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtener(@PathVariable Long id) {
-        Usuario usuario = usuarioService.obtenerUsuario(id);
-        return (usuario != null) ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
-    public List<Usuario> listar() {
-        return usuarioService.listarUsuarios();
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        return ResponseEntity.ok(usuarioService.obtenerUsuarios());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioService.obtenerUsuarioPorId(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Usuario> crearUsuario(@RequestBody UsuarioRequest request) {
+        Usuario nuevo = usuarioService.crearUsuario(
+                request.getNombre(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getRolId()
+        );
+        return ResponseEntity.ok(nuevo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-        Usuario actualizado = usuarioService.actualizarUsuario(id, usuario);
-        return (actualizado != null) ? ResponseEntity.ok(actualizado) : ResponseEntity.notFound().build();
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequest request) {
+        Usuario actualizado = usuarioService.actualizarUsuario(
+                id,
+                request.getNombre(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getRolId()
+        );
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // DTO para entrada de datos
+    public static class UsuarioRequest {
+        private String nombre;
+        private String email;
+        private String password;
+        private Long rolId;
+
+        public String getNombre() { return nombre; }
+        public void setNombre(String nombre) { this.nombre = nombre; }
+
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+
+        public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
+
+        public Long getRolId() { return rolId; }
+        public void setRolId(Long rolId) { this.rolId = rolId; }
     }
 }

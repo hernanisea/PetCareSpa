@@ -1,41 +1,69 @@
 package com.Microservicios.GestionUsuarios.service;
 
+import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
+import com.Microservicios.GestionUsuarios.repository.RolRepository;
 import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
 
-    public List<Usuario> listarUsuarios() {
+    @Autowired
+    public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
+    }
+
+    public List<Usuario> obtenerUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    public Usuario obtenerUsuario(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
-    }
+    public Usuario crearUsuario(String nombre, String email, String password, Long rolId) {
+        Rol rol = rolRepository.findById(rolId)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + rolId));
 
-    public Usuario agregarUsuario(Usuario usuario) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(nombre);
+        usuario.setEmail(email);
+        usuario.setPassword(password);
+        usuario.setRol(rol);
+
         return usuarioRepository.save(usuario);
     }
 
+    public Usuario obtenerUsuarioPorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+    }
+
     public void eliminarUsuario(Long id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("No existe un usuario con ID: " + id);
+        }
         usuarioRepository.deleteById(id);
     }
 
-    public Usuario actualizarUsuario(Long id, Usuario usuarioActualizado) {
-        return usuarioRepository.findById(id).map(usuario -> {
-            usuario.setUsername(usuarioActualizado.getUsername());
-            usuario.setPassword(usuarioActualizado.getPassword());
-            usuario.setTelefono(usuarioActualizado.getTelefono());
-            usuario.setRol(usuarioActualizado.getRol());
-            return usuarioRepository.save(usuario);
-        }).orElse(null);
+    public Usuario actualizarUsuario(Long id, String nombre, String email, String password, Long rolId) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+
+        Rol rol = rolRepository.findById(rolId)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + rolId));
+
+        usuario.setNombre(nombre);
+        usuario.setEmail(email);
+        usuario.setPassword(password);
+        usuario.setRol(rol);
+
+        return usuarioRepository.save(usuario);
     }
 }
