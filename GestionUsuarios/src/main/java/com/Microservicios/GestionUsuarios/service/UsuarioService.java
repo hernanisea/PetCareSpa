@@ -1,24 +1,18 @@
 package com.Microservicios.GestionUsuarios.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
 import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
-
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
-@Transactional
 public class UsuarioService {
-    
-    @Autowired
+
     private final UsuarioRepository usuarioRepository;
-    @Autowired
     private final RolRepository rolRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
@@ -30,43 +24,62 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario crearUsuario(String nombre, String email, String password, Long rolId) {
-        Rol rol = rolRepository.findById(rolId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + rolId));
+    @Transactional
+    public Usuario crearUsuario(String nombre, String apellido, String correo, String clave,
+                                Boolean estado, String telefono, Long idDireccion, Long idRol) {
+
+        if (usuarioRepository.existsByCorreo(correo)) {
+            throw new RuntimeException("Ya existe un usuario con el correo: " + correo);
+        }
+
+        Rol rol = rolRepository.findById(idRol)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + idRol));
 
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
-        usuario.setEmail(email);
-        usuario.setPassword(password);
+        usuario.setApellido(apellido);
+        usuario.setCorreo(correo);
+        usuario.setClave(clave);
+        usuario.setEstado(estado);
+        usuario.setTelefono(telefono);
+        usuario.setIdDireccion(idDireccion);
         usuario.setRol(rol);
 
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario obtenerUsuarioPorId(Long id) {
-        return usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+    public Usuario obtenerUsuarioPorId(Long idUsuario) {
+        return usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + idUsuario));
     }
 
-    public void eliminarUsuario(Long id) {
-        if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("No existe un usuario con ID: " + id);
-        }
-        usuarioRepository.deleteById(id);
-    }
+    @Transactional
+    public Usuario actualizarUsuario(Long idUsuario, String nombre, String apellido, String correo, String clave,
+                                     Boolean estado, String telefono, Long idDireccion, Long idRol) {
 
-    public Usuario actualizarUsuario(Long id, String nombre, String email, String password, Long rolId) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + idUsuario));
 
-        Rol rol = rolRepository.findById(rolId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + rolId));
+        Rol rol = rolRepository.findById(idRol)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + idRol));
 
         usuario.setNombre(nombre);
-        usuario.setEmail(email);
-        usuario.setPassword(password);
+        usuario.setApellido(apellido);
+        usuario.setCorreo(correo);
+        usuario.setClave(clave);
+        usuario.setEstado(estado);
+        usuario.setTelefono(telefono);
+        usuario.setIdDireccion(idDireccion);
         usuario.setRol(rol);
 
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void eliminarUsuario(Long idUsuario) {
+        if (!usuarioRepository.existsById(idUsuario)) {
+            throw new RuntimeException("No existe un usuario con ID: " + idUsuario);
+        }
+        usuarioRepository.deleteById(idUsuario);
     }
 }
