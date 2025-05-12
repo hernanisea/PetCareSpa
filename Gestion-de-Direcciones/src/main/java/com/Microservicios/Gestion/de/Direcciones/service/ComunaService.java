@@ -3,7 +3,6 @@ package com.Microservicios.Gestion.de.Direcciones.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Microservicios.Gestion.de.Direcciones.model.Comuna;
@@ -16,7 +15,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class ComunaService {
     
-    @Autowired
+   
     private final ComunaRepository comunaRepository;
 
     public ComunaService(ComunaRepository comunaRepository) {

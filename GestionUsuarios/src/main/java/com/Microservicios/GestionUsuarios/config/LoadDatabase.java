@@ -1,12 +1,13 @@
 package com.Microservicios.GestionUsuarios.config;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
 import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LoadDatabase {

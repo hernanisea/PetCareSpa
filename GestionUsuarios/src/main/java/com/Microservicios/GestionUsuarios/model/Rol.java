@@ -26,5 +26,7 @@ public class Rol {
     private String nombre;
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonManagedReference
     private List<Usuario> usuarios;
+
 }

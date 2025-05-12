@@ -33,10 +33,11 @@ public class Usuario {
     @Column(name = "telefono", length = 20)
     private String telefono;
 
-    @Column(name = "id_direccion", nullable = false)
+    @Column(name = "id_direccion")
     private Long idDireccion;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_rol", nullable = false, foreignKey = @ForeignKey(name = "FK_usuario_rol"))
+    @com.fasterxml.jackson.annotation.JsonBackReference
     private Rol rol;
+
 }

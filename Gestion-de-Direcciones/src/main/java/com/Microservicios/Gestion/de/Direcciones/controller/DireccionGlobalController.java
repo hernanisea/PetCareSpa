@@ -2,7 +2,6 @@ package com.Microservicios.Gestion.de.Direcciones.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +21,11 @@ import com.Microservicios.Gestion.de.Direcciones.service.RegionService;
 @RestController
 @RequestMapping("/api/v1/direccion")
 public class DireccionGlobalController {
-    @Autowired
+  
     private final DireccionService direccionService;
-    @Autowired
+    
     private final ComunaService comunaService;
-    @Autowired
+    
     private final RegionService regionService;
 
     public DireccionGlobalController(DireccionService direccionService,
@@ -37,7 +36,6 @@ public class DireccionGlobalController {
         this.regionService = regionService;
     }
 
-    // ---------------- DIRECCIONES ----------------
 
     @GetMapping("/direcciones")
     public List<Direccion> findAllDirecciones() {
@@ -61,7 +59,7 @@ public class DireccionGlobalController {
         direccionService.delete(id);
     }
 
-    // ---------------- COMUNAS ----------------
+   
 
     @GetMapping("/comunas")
     public List<Comuna> findAllComunas() {
@@ -85,7 +83,7 @@ public class DireccionGlobalController {
         comunaService.delete(id);
     }
 
-    // ---------------- REGIONES ----------------
+    
 
     @GetMapping("/regiones")
     public List<Region> findAllRegiones() {

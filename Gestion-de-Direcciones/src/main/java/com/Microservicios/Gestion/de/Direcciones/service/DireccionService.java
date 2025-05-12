@@ -3,7 +3,6 @@ package com.Microservicios.Gestion.de.Direcciones.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Microservicios.Gestion.de.Direcciones.model.Direccion;
@@ -14,7 +13,7 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class DireccionService {
-    @Autowired
+   
     private final DireccionRepository direccionRepository;
 
     public DireccionService(DireccionRepository direccionRepository) {
