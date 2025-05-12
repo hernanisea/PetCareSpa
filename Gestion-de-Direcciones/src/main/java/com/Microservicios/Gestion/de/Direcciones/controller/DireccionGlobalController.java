@@ -2,6 +2,7 @@ package com.Microservicios.Gestion.de.Direcciones.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,13 @@ import com.Microservicios.Gestion.de.Direcciones.service.DireccionService;
 import com.Microservicios.Gestion.de.Direcciones.service.RegionService;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/direccion")
 public class DireccionGlobalController {
-
+    @Autowired
     private final DireccionService direccionService;
+    @Autowired
     private final ComunaService comunaService;
+    @Autowired
     private final RegionService regionService;
 
     public DireccionGlobalController(DireccionService direccionService,
