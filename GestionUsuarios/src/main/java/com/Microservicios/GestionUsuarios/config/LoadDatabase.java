@@ -17,76 +17,37 @@ public class LoadDatabase {
             if (rolRepo.count() == 0 && usuarioRepo.count() == 0) {
 
                 // Crear roles
-                Rol adminSistema = rolRepo.save(new Rol(null, "Administrador del Sistema", null));
-                Rol coordinadorClinica = rolRepo.save(new Rol(null, "Coordinador de Clínica", null));
-                Rol veterinario = rolRepo.save(new Rol(null, "Veterinario", null));
-                Rol gestorInventario = rolRepo.save(new Rol(null, "Gestor de Inventario", null));
-                Rol cliente = rolRepo.save(new Rol(null, "Cliente", null));
+                Rol adminSistema = rolRepo.save(new Rol("Administrador del Sistema"));
+                Rol coordinadorClinica = rolRepo.save(new Rol("Coordinador de Clínica"));
+                Rol veterinario = rolRepo.save(new Rol("Veterinario"));
+                Rol gestorInventario = rolRepo.save(new Rol("Gestor de Inventario"));
+                Rol cliente = rolRepo.save(new Rol("Cliente"));
 
-                // Usuario Admin
-                Usuario admin = new Usuario();
-                admin.setNombre("admin");
-                admin.setApellido("Admin");
-                admin.setCorreo("admin@demo.com");
-                admin.setClave("admin123");
-                admin.setEstado(true);
-                admin.setTelefono("10000001");
-                admin.setIdDireccion(1L);
-                admin.setRol(adminSistema);
-                usuarioRepo.save(admin);
-
-                // Usuario Coordinador
-                Usuario coord = new Usuario();
-                coord.setNombre("coordinador");
-                coord.setApellido("Coordinador");
-                coord.setCorreo("coord@demo.com");
-                coord.setClave("coord123");
-                coord.setEstado(true);
-                coord.setTelefono("10000002");
-                coord.setIdDireccion(2L);
-                coord.setRol(coordinadorClinica);
-                usuarioRepo.save(coord);
-
-                // Usuario Veterinario
-                Usuario vet = new Usuario();
-                vet.setNombre("vet");
-                vet.setApellido("Veterinario");
-                vet.setCorreo("vet@demo.com");
-                vet.setClave("vet123");
-                vet.setEstado(true);
-                vet.setTelefono("10000003");
-                vet.setIdDireccion(3L);
-                vet.setRol(veterinario);
-                usuarioRepo.save(vet);
-
-                // Usuario Inventario
-                Usuario inv = new Usuario();
-                inv.setNombre("inventario");
-                inv.setApellido("Inventario");
-                inv.setCorreo("inv@demo.com");
-                inv.setClave("inv123");
-                inv.setEstado(true);
-                inv.setTelefono("10000004");
-                inv.setIdDireccion(4L);
-                inv.setRol(gestorInventario);
-                usuarioRepo.save(inv);
-
-                // Usuario Cliente
-                Usuario cli = new Usuario();
-                cli.setNombre("cliente");
-                cli.setApellido("Cliente");
-                cli.setCorreo("cliente@demo.com");
-                cli.setClave("cliente123");
-                cli.setEstado(true);
-                cli.setTelefono("10000005");
-                cli.setIdDireccion(5L);
-                cli.setRol(cliente);
-                usuarioRepo.save(cli);
+                // Crear y guardar usuarios
+                usuarioRepo.save(crearUsuario("admin", "Admin", "admin@demo.com", "admin123", "10000001", 1L, adminSistema));
+                usuarioRepo.save(crearUsuario("coordinador", "Coordinador", "coord@demo.com", "coord123", "10000002", 2L, coordinadorClinica));
+                usuarioRepo.save(crearUsuario("vet", "Veterinario", "vet@demo.com", "vet123", "10000003", 3L, veterinario));
+                usuarioRepo.save(crearUsuario("inventario", "Inventario", "inv@demo.com", "inv123", "10000004", 4L, gestorInventario));
+                usuarioRepo.save(crearUsuario("cliente", "Cliente", "cliente@demo.com", "cliente123", "10000005", 5L, cliente));
 
                 System.out.println("✅ Roles y usuarios iniciales cargados.");
             } else {
                 System.out.println("⚠️ Los datos ya existen. No se cargaron nuevos registros.");
             }
         };
+    }
+
+    private Usuario crearUsuario(String nombre, String apellido, String correo, String clave,
+                                 String telefono, Long idDireccion, Rol rol) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(nombre);
+        usuario.setApellido(apellido);
+        usuario.setCorreo(correo);
+        usuario.setClave(clave);  // Aquí podrías usar encriptación en el futuro
+        usuario.setEstado(true);
+        usuario.setTelefono(telefono);
+        usuario.setIdDireccion(idDireccion);
+        usuario.setRol(rol);
+        return usuario;
     }
 }

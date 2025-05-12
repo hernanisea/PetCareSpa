@@ -26,14 +26,14 @@ public class UsuarioService {
 
     @Transactional
     public Usuario crearUsuario(String nombre, String apellido, String correo, String clave,
-                                Boolean estado, String telefono, Long idDireccion, Long idRol) {
+                                Boolean estado, String telefono, Long idDireccion, Long id) {
 
         if (usuarioRepository.existsByCorreo(correo)) {
             throw new RuntimeException("Ya existe un usuario con el correo: " + correo);
         }
 
-        Rol rol = rolRepository.findById(idRol)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + idRol));
+        Rol rol = rolRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + id));
 
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
@@ -55,13 +55,13 @@ public class UsuarioService {
 
     @Transactional
     public Usuario actualizarUsuario(Long idUsuario, String nombre, String apellido, String correo, String clave,
-                                     Boolean estado, String telefono, Long idDireccion, Long idRol) {
+                                     Boolean estado, String telefono, Long idDireccion, Long id) {
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + idUsuario));
 
-        Rol rol = rolRepository.findById(idRol)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + idRol));
+        Rol rol = rolRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + id));
 
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);

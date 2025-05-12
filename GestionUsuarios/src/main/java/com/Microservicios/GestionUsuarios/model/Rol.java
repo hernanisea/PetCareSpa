@@ -1,8 +1,8 @@
 package com.Microservicios.GestionUsuarios.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -10,16 +10,21 @@ import java.util.List;
 @Table(name = "roles")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Rol {
+
+        public Rol(String nombre) {
+        this.nombre = nombre;
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_rol")
     private Long id;
 
+    @Column(name = "nombre", nullable = false, length = 50, unique = true)
     private String nombre;
 
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
     private List<Usuario> usuarios;
 }

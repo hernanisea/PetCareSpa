@@ -12,26 +12,29 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "direcciones")
 @Entity
+@Table(name = "direcciones")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Direccion {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDireccion;
-    
-    @Column(nullable= false,length= 40)
+
+    @Column(nullable = false, length = 40)
     private String calle;
+
     @Column(length = 100)
     private String descripcion;
-    @Column(nullable= false)
+
+    @Column(nullable = false)
     private int codigoPostal;
 
     @ManyToOne
-    @JoinColumn(name = "id_region", nullable = false)
-    private Long idComuna;
-
-
+    @JoinColumn(name = "id_comuna", nullable = false)
+    private Comuna comuna; // ✔️ relación correcta
 }
+
+
+

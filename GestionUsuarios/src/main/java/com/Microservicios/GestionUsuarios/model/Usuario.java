@@ -1,44 +1,42 @@
 package com.Microservicios.GestionUsuarios.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usuarios")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    private Long idUsuario;
+    private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "apellido", nullable = false, length = 50)
     private String apellido;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "correo", nullable = false, unique = true, length = 100)
     private String correo;
 
-    @Column(nullable = false)
+    @Column(name = "clave", nullable = false)
     private String clave;
 
-    @Column(nullable = false)
+    @Column(name = "estado", nullable = false)
     private Boolean estado;
 
-    @Column(length = 15)
+    @Column(name = "telefono", length = 20)
     private String telefono;
 
     @Column(name = "id_direccion", nullable = false)
     private Long idDireccion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_rol", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "id_rol", nullable = false, foreignKey = @ForeignKey(name = "FK_usuario_rol"))
     private Rol rol;
 }

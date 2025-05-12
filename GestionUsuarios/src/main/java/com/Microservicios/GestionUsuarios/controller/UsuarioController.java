@@ -55,7 +55,7 @@ public class UsuarioController {
                 request.getEstado(),
                 request.getTelefono(),
                 request.getIdDireccion(),
-                request.getRolId()
+                request.getId()
         );
         return ResponseEntity.ok(nuevo);
     }
@@ -71,7 +71,7 @@ public class UsuarioController {
                 request.getEstado(),
                 request.getTelefono(),
                 request.getIdDireccion(),
-                request.getRolId()
+                request.getId()
         );
         return ResponseEntity.ok(actualizado);
     }
@@ -91,7 +91,7 @@ public class UsuarioController {
         private Boolean estado;
         private String telefono;
         private Long idDireccion;
-        private Long rolId;
+        private Long Id;
 
         public String getNombre() { return nombre; }
         public void setNombre(String nombre) { this.nombre = nombre; }
@@ -114,7 +114,7 @@ public class UsuarioController {
         public Long getIdDireccion() { return idDireccion; }
         public void setIdDireccion(Long idDireccion) { this.idDireccion = idDireccion; }
 
-        public Long getRolId() { return rolId; }
-        public void setRolId(Long rolId) { this.rolId = rolId; }
+        public Long getId() { return Id; }
+        public void setId(Long Id) { this.Id = Id; }
     }
 }

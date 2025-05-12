@@ -10,17 +10,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "Region")
 @Entity
+@Table(name = "Region")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Region {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRegion;
 
-    @Column(nullable= false, length = 30)
+    @Column(nullable = false, length = 30)
     private String nombre;
 }
