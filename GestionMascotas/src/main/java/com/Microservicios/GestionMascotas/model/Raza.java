@@ -1,4 +1,4 @@
-package com.Microservicios.GestionUsuarios.model;
+package com.Microservicios.GestionMascotas.model;
 
 import java.util.List;
 
@@ -14,28 +14,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "roles")
+@Table(name= "raza")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Rol {
+@Entity
 
-        public Rol(String nombre) {
-        this.nombre = nombre;
-    }
-
-
+public class Raza {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_rol")
-    private Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private long idRaza;
 
-    @Column(name = "nombre", nullable = false, length = 50, unique = true)
-    private String nombre;
+    @Column(name = "nombre", nullable = false, length = 35, unique = true)
+    private String nombre; 
 
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
+    
+    @OneToMany(mappedBy = "raza", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonManagedReference
-    private List<Usuario> usuarios;
+    private List<Mascotas> mascotas;
 
 }
