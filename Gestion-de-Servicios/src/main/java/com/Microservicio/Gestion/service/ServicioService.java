@@ -1,13 +1,17 @@
 package com.Microservicio.Gestion.service;
 
-import com.Microservicio.Gestion.model.Servicio;
-import com.Microservicio.Gestion.repository.ServicioRepository;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.Microservicio.Gestion.model.Servicio;
+import com.Microservicio.Gestion.model.TipoServicio;
+import com.Microservicio.Gestion.repository.ServicioRepository;
+
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ServicioService {
 
     private final ServicioRepository servicioRepository;
@@ -16,31 +20,36 @@ public class ServicioService {
         this.servicioRepository = servicioRepository;
     }
 
-    public List<Servicio> obtenerTodos() {
+    public List<Servicio> obtenerTodosServicios() {
         return servicioRepository.findAll();
     }
 
-    public Servicio obtenerPorId(Long id) {
-        return servicioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + id));
+    public Servicio obtenerPorIdServicio(Long idServicio) {
+        return servicioRepository.findById(idServicio)
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + idServicio));
     }
 
-    public Servicio crear(LocalDateTime fechaReserva, Boolean estado) {
+    public Servicio crearServicio(String nombre, String descripcion, Integer precio, TipoServicio tipoServicio) {
         Servicio servicio = new Servicio();
-        servicio.setFechaReserva(fechaReserva);
-        servicio.setEstado(estado);
-        servicio.setFechaCreacion(LocalDateTime.now());
+        servicio.setNombre(nombre);
+        servicio.setDescripcion(descripcion);
+        servicio.setPrecio(precio);
+        servicio.setTipoServicio(tipoServicio);
+        servicio.setIdTipo(tipoServicio.getIdTipo()); // Asumiendo que tipoServicio tiene getIdTipo()
         return servicioRepository.save(servicio);
     }
 
-    public Servicio actualizar(Long id, LocalDateTime fechaReserva, Boolean estado) {
-        Servicio servicio = obtenerPorId(id);
-        servicio.setFechaReserva(fechaReserva);
-        servicio.setEstado(estado);
+    public Servicio actualizar(Long id, String nombre, String descripcion, Integer precio, TipoServicio tipoServicio) {
+        Servicio servicio = obtenerPorIdServicio(id);
+        servicio.setNombre(nombre);
+        servicio.setDescripcion(descripcion);
+        servicio.setPrecio(precio);
+        servicio.setTipoServicio(tipoServicio);
+        servicio.setIdTipo(tipoServicio.getIdTipo());
         return servicioRepository.save(servicio);
     }
 
-    public void eliminar(Long id) {
-        servicioRepository.deleteById(id);
+    public void eliminar(Long idServicio) {
+        servicioRepository.deleteById(idServicio);
     }
 }
