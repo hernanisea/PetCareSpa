@@ -1,5 +1,7 @@
 package com.Microservicios.HistorialClinico.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,8 +11,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "historial_clinico")
@@ -23,23 +23,20 @@ public class HistorialClinico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Long mascotaId;
-
+    private Long idHistorial;
 
     @Column(nullable = false)
-    private Date fechaConsulta;
+    private Date fechaHistorial;
 
 
     @Column(length = 500)
-    private String sintomas;
+    private String antecedentees;
 
+     @Column(length = 500)
+    private String comentarios;
 
     @Column(length = 500)
     private String diagnostico;
 
-
-    @Column(length = 500)
-    private String tratamiento;
+    
 }

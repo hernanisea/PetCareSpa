@@ -1,13 +1,13 @@
 package com.Microservicios.HistorialClinico.service;
 
-import com.Microservicios.HistorialClinico.model.HistorialClinico;
-import com.Microservicios.HistorialClinico.repository.HistorialClinicoRepository;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.List;
-import java.util.Optional;
+import com.Microservicios.HistorialClinico.model.HistorialClinico;
+import com.Microservicios.HistorialClinico.repository.HistorialClinicoRepository;
 
 @Service
 public class HistorialClinicoService {
@@ -15,24 +15,29 @@ public class HistorialClinicoService {
     @Autowired
     private HistorialClinicoRepository historialClinicoRepository;
 
-    public List<HistorialClinico>obtenerTodos(){
+    public List<HistorialClinico> obtenerHistoriales() {
         return historialClinicoRepository.findAll();
     }
 
-
-    public Optional<HistorialClinico> obtenerPorId(Long id){
-        return historialClinicoRepository.findById(id);
-
-
+    public HistorialClinico obtenerHistorialPorId(Long id) {
+        return historialClinicoRepository.findById(id).orElseThrow();
     }
 
-
-    public List<HistorialClinico> obtenerPorMascotaId(Long mascotaId){
-        return historialClinicoRepository.findByMascotaId(mascotaId);
+    public HistorialClinico crearHistorial(Date fechaHistorial, String antecedentes, String comentarios, String diagnostico) {
+        HistorialClinico nuevo = new HistorialClinico(null, fechaHistorial, antecedentes, comentarios, diagnostico);
+        return historialClinicoRepository.save(nuevo);
     }
 
-    public HistorialClinico guardar(HistorialClinico historialClinico){
-        return historialClinicoRepository.save(historialClinico);
+    public HistorialClinico actualizarHistorial(Long id, Date fechaHistorial, String antecedentes, String comentarios, String diagnostico) {
+        HistorialClinico historial = obtenerHistorialPorId(id);
+        historial.setFechaHistorial(fechaHistorial);
+        historial.setAntecedentees(antecedentes);
+        historial.setComentarios(comentarios);
+        historial.setDiagnostico(diagnostico);
+        return historialClinicoRepository.save(historial);
     }
 
+    public void eliminarHistorial(Long id) {
+        historialClinicoRepository.deleteById(id);
+    }
 }
