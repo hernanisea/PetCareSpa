@@ -39,9 +39,9 @@ public class DireccionConfig {
                 direccionRepo.save(new Direccion(null, "Paicaví 404", "Edificio rojo", 4100000, comuna4));
                 direccionRepo.save(new Direccion(null, "Prat 505", null, 4780000, comuna5));
 
-                System.out.println("✅ Datos iniciales cargados correctamente.");
+                System.out.println(" Datos iniciales cargados correctamente.");
             } else {
-                System.out.println("ℹ️ Datos ya existen. No se cargaron nuevos datos.");
+                System.out.println(" Datos ya existen. No se cargaron nuevos datos.");
             }
         };
     }

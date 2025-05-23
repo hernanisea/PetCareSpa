@@ -16,35 +16,36 @@ import jakarta.transaction.Transactional;
 public class InventarioService {
 
     @Autowired
-private InventarioRepository inventarioRepository;
+    private InventarioRepository inventarioRepository;
 
-public List<Inventario> listarInventario() {
-    return inventarioRepository.findAll();
-}
-
-public Inventario obtenerProducto(long idProducto) {
-    return inventarioRepository.findById(idProducto).orElse(null);
-}
-
-public Inventario agregarInventario(Inventario inventario) {
-    return inventarioRepository.save(inventario);
-}
-
-public void eliminarProducto(long idProducto) {
-    inventarioRepository.deleteById(idProducto);
-}
-
-public Inventario inventarioActualizado(long idProducto, Inventario inventarioActualizado) {
-    Inventario productoExistente = inventarioRepository.findById(idProducto).orElse(null);
-    if (productoExistente != null) {
-        productoExistente.setNombreProducto(inventarioActualizado.getNombreProducto());
-        productoExistente.setDescripcion(inventarioActualizado.getDescripcion());
-        productoExistente.setCantidad(inventarioActualizado.getCantidad());
-        productoExistente.setUnidadMedida(inventarioActualizado.getUnidadMedida());
-        productoExistente.setStockMinimo(inventarioActualizado.getStockMinimo());
-        productoExistente.setFechaIngreso(inventarioActualizado.getFechaIngreso());
-        return inventarioRepository.save(productoExistente);
+    public List<Inventario> listarInventario() {
+        return inventarioRepository.findAll();
     }
-    return null;
-}
+
+    public Inventario obtenerProducto(long idProducto) {
+        return inventarioRepository.findById(idProducto).orElse(null);
+    }
+
+    public Inventario agregarInventario(Inventario inventario) {
+        return inventarioRepository.save(inventario);
+    }
+
+    public void eliminarProducto(long idProducto) {
+        inventarioRepository.deleteById(idProducto);
+    }
+
+    public Inventario inventarioActualizado(long idProducto, Inventario inventarioActualizado) {
+        Inventario productoExistente = inventarioRepository.findById(idProducto).orElse(null);
+        if (productoExistente != null) {
+            productoExistente.setNombreProducto(inventarioActualizado.getNombreProducto());
+            productoExistente.setDescripcion(inventarioActualizado.getDescripcion());
+            productoExistente.setStock(inventarioActualizado.getStock());
+            productoExistente.setUnidadMedida(inventarioActualizado.getUnidadMedida());
+            productoExistente.setStockMinimo(inventarioActualizado.getStockMinimo());
+            productoExistente.setPrecio(inventarioActualizado.getPrecio());
+            productoExistente.setFechaIngreso(inventarioActualizado.getFechaIngreso());
+            return inventarioRepository.save(productoExistente);
+        }
+        return null;
+    }
 }

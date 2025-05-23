@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "inventario")
+@Table(name = "Inventario")
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -30,13 +30,16 @@ public class Inventario {
     private String descripcion;
 
     @Column(length= 100, nullable = false)
-    private Integer cantidad;
+    private Integer stock;
 
     @Column(length= 20, nullable = false)
     private String unidadMedida;
 
     @Column(length= 10, nullable = false)
     private Integer stockMinimo;
+
+    @Column(length= 10, nullable = false)
+    private Integer precio;
 
     @Column(name = "fecha_ingreso", length= 10, nullable = false)
     private Date fechaIngreso;
