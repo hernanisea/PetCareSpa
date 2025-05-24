@@ -1,50 +1,96 @@
 package com.Microservicios.GestionInventario.controller;
 
+import com.Microservicios.GestionInventario.model.Producto;
+import com.Microservicios.GestionInventario.model.Tratamiento;
+import com.Microservicios.GestionInventario.service.ProductoService;
+import com.Microservicios.GestionInventario.service.TratamientoService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.Microservicios.GestionInventario.model.Inventario;
-import com.Microservicios.GestionInventario.service.InventarioService;
-
 @RestController
-@RequestMapping("/api/v1/Inventario")
+@RequestMapping("/api/v1/inventario")
+@CrossOrigin(origins = "*")
 public class InventarioController {
 
-    @Autowired
-    private InventarioService inventarioService;
+    private final ProductoService productoService;
+    private final TratamientoService tratamientoService;
 
-    @GetMapping
-    public ResponseEntity<List<Inventario>> listarInventario() {
-        List<Inventario> lista = inventarioService.listarInventario();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+    public InventarioController(ProductoService productoService, TratamientoService tratamientoService) {
+        this.productoService = productoService;
+        this.tratamientoService = tratamientoService;
     }
 
-    @PostMapping
-    public ResponseEntity<Inventario> guardarInventario(@RequestBody Inventario inventario) {
-        Inventario nuevo = inventarioService.agregarInventario(inventario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
+    // -------------------
+    // Endpoints Producto
+    // -------------------
+
+    @GetMapping("/productos")
+    public ResponseEntity<List<Producto>> listarProductos() {
+        return ResponseEntity.ok(productoService.listarTodos());
     }
 
-  
-    @PutMapping("/{idProducto}")
-    public ResponseEntity<Inventario> inventarioActualizado(@PathVariable Long idProducto, @RequestBody Inventario inventario) {
-        Inventario actualizado = inventarioService.inventarioActualizado(idProducto, inventario);
-        if (actualizado == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(actualizado);
+    @GetMapping("/productos/{id}")
+    public ResponseEntity<Producto> obtenerProducto(@PathVariable Long id) {
+        return ResponseEntity.ok(productoService.obtenerPorId(id));
+    }
+
+    @PostMapping("/productos")
+    public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
+        return ResponseEntity.ok(productoService.guardar(producto));
+    }
+
+    @PutMapping("/productos/{id}")
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
+        return ResponseEntity.ok(productoService.actualizar(id, producto));
+    }
+
+    @DeleteMapping("/productos/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
+        productoService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ----------------------
+    // Endpoints Tratamiento
+    // ----------------------
+
+    @GetMapping("/tratamientos")
+    public ResponseEntity<List<Tratamiento>> listarTratamientos() {
+        return ResponseEntity.ok(tratamientoService.listarTodos());
+    }
+
+    @GetMapping("/tratamientos/{id}")
+    public ResponseEntity<Tratamiento> obtenerTratamiento(@PathVariable Long id) {
+        return ResponseEntity.ok(tratamientoService.obtenerPorId(id));
+    }
+
+    @PostMapping("/tratamientos")
+    public ResponseEntity<Tratamiento> crearTratamiento(@RequestBody TratamientoRequest request) {
+        Tratamiento nuevo = new Tratamiento(null, request.getCantidad(), request.getSubtotal(), null);
+        return ResponseEntity.ok(tratamientoService.guardar(nuevo, request.getIdProducto()));
+    }
+
+    @DeleteMapping("/tratamientos/{id}")
+    public ResponseEntity<Void> eliminarTratamiento(@PathVariable Long id) {
+        tratamientoService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // DTO interno para el POST de tratamientos
+    public static class TratamientoRequest {
+        private Integer cantidad;
+        private Double subtotal;
+        private Long idProducto;
+
+        public Integer getCantidad() { return cantidad; }
+        public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
+
+        public Double getSubtotal() { return subtotal; }
+        public void setSubtotal(Double subtotal) { this.subtotal = subtotal; }
+
+        public Long getIdProducto() { return idProducto; }
+        public void setIdProducto(Long idProducto) { this.idProducto = idProducto; }
     }
 }

@@ -1,58 +1,57 @@
 package com.Microservicios.GestionInventario.config;
 
-import java.util.Date;
+import com.Microservicios.GestionInventario.model.Producto;
+import com.Microservicios.GestionInventario.model.Tratamiento;
+import com.Microservicios.GestionInventario.repository.ProductoRepository;
+import com.Microservicios.GestionInventario.repository.TratamientoRepository;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.Microservicios.GestionInventario.model.Inventario;
-import com.Microservicios.GestionInventario.repository.InventarioRepository;
+
 
 @Configuration
 public class LoadDataBase {
 
     @Bean
-    CommandLineRunner initDataBase(InventarioRepository inventarioRepo) {
+    CommandLineRunner initDatabase(ProductoRepository productoRepo, TratamientoRepository tratamientoRepo) {
         return args -> {
-            if (inventarioRepo.count() == 0) {
-                // Agregar productos de ejemplo
-                inventarioRepo.save(new Inventario(
-                        null,
-                        "Vacuna Antirrábica",
-                        "Vacuna para prevenir la rabia en mascotas",
-                        150,
-                        "Unidades",
-                        10,
-                        2500,
-                        new Date()
-                ));
+            if (productoRepo.count() == 0 && tratamientoRepo.count() == 0) {
 
-                inventarioRepo.save(new Inventario(
-                        null,
-                        "Jeringas 3ml",
-                        "Paquete de 100 jeringas desechables",
-                        50,
-                        "Paquetes",
-                        5,
-                        8000,
-                        new Date()
-                ));
+                // Crear productos
+Producto antibiotico = productoRepo.save(new Producto(
+    null, "Antibiótico Canino", "Antibiótico de amplio espectro para perros", 100, 15.0));
 
-                inventarioRepo.save(new Inventario(
-                        null,
-                        "Antibiótico Canino",
-                        "Medicamento oral para infecciones bacterianas",
-                        80,
-                        "Botellas",
-                        15,
-                        12500,
-                        new Date()
-                ));
+Producto desparasitante = productoRepo.save(new Producto(
+    null, "Desparasitante Felino", "Desparasitante oral para gatos", 50, 12.0));
 
-                System.out.println(" Inventario inicial cargado correctamente.");
+Producto jeringas = productoRepo.save(new Producto(
+    null, "Jeringas 5ml", "Jeringas desechables de 5ml", 200, 0.5));
+
+Producto vacunaTriple = productoRepo.save(new Producto(
+    null, "Vacuna Triple Felina", "Vacuna contra herpesvirus, calicivirus y panleucopenia felina", 80, 25.0));
+
+
+                // Crear tratamientos con productos asociados
+// Crear tratamientos con productos asociados
+Tratamiento infeccionCanina = new Tratamiento(null, 2, antibiotico.getPrecio() * 2, antibiotico);
+tratamientoRepo.save(infeccionCanina);
+
+Tratamiento desparasitacionFelina = new Tratamiento(null, 1, desparasitante.getPrecio(), desparasitante);
+tratamientoRepo.save(desparasitacionFelina);
+
+Tratamiento vacunacionBasicaFelina = new Tratamiento(null, 1, vacunaTriple.getPrecio(), vacunaTriple);
+tratamientoRepo.save(vacunacionBasicaFelina);
+
+Tratamiento aplicacionInyeccion = new Tratamiento(null, 5, jeringas.getPrecio() * 5, jeringas);
+tratamientoRepo.save(aplicacionInyeccion);
+
+
+
+                System.out.println("✅ Productos y tratamientos iniciales cargados.");
             } else {
-                System.out.println(" El inventario ya contiene datos. No se cargó información inicial.");
+                System.out.println("⚠️ Los datos ya existen. No se cargaron nuevos registros.");
             }
         };
     }
