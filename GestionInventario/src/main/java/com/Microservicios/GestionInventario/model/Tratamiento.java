@@ -13,7 +13,7 @@ public class Tratamiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tratamiento")
-    private Long id;
+    private Long idTratamiento;
 
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;

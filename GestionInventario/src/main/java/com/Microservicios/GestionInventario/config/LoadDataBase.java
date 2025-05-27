@@ -19,16 +19,16 @@ public class LoadDataBase {
 
                 // Crear productos
                 Producto antibiotico = productoRepo.save(new Producto(
-                        null, "Antibiótico Canino", "Antibiótico de amplio espectro para perros", 100, 15.0));
+                        null, "Antibiótico Canino", "Antibiótico de amplio espectro para perros", 100, 15.0, null));
 
                 Producto desparasitante = productoRepo.save(new Producto(
-                        null, "Desparasitante Felino", "Desparasitante oral para gatos", 50, 12.0));
+                        null, "Desparasitante Felino", "Desparasitante oral para gatos", 50, 12.0, null));
 
                 Producto jeringas = productoRepo.save(new Producto(
-                        null, "Jeringas 5ml", "Jeringas desechables de 5ml", 200, 0.5));
+                        null, "Jeringas 5ml", "Jeringas desechables de 5ml", 200, 0.5, null));
 
                 Producto vacunaTriple = productoRepo.save(new Producto(
-                        null, "Vacuna Triple Felina", "Vacuna contra herpesvirus, calicivirus y panleucopenia felina", 80, 25.0));
+                        null, "Vacuna Triple Felina", "Vacuna contra herpesvirus, calicivirus y panleucopenia felina", 80, 25.0, null));
 
                 // Crear tratamientos con productos asociados
                 // Crear tratamientos con productos asociados

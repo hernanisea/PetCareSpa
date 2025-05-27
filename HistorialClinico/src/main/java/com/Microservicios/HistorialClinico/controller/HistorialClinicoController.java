@@ -46,7 +46,9 @@ public class HistorialClinicoController {
                 request.getFechaHistorial(),
                 request.getAntecedentes(),
                 request.getComentarios(),
-                request.getDiagnostico()
+                request.getDiagnostico(),
+                request.getIdTratamiento(),
+                request.getIdReportes()
         );
         return ResponseEntity.ok(nuevo);
     }
@@ -58,7 +60,9 @@ public class HistorialClinicoController {
                 request.getFechaHistorial(),
                 request.getAntecedentes(),
                 request.getComentarios(),
-                request.getDiagnostico()
+                request.getDiagnostico(),
+                request.getIdTratamiento(),
+                request.getIdReportes()
         );
         return ResponseEntity.ok(actualizado);
     }
@@ -75,6 +79,8 @@ public class HistorialClinicoController {
         private String antecedentes;
         private String comentarios;
         private String diagnostico;
+        private Long idTratamiento;
+        private Long idReportes;
 
         public Date getFechaHistorial() { return fechaHistorial; }
         public void setFechaHistorial(Date fechaHistorial) { this.fechaHistorial = fechaHistorial; }
@@ -87,5 +93,11 @@ public class HistorialClinicoController {
 
         public String getDiagnostico() { return diagnostico; }
         public void setDiagnostico(String diagnostico) { this.diagnostico = diagnostico; }
+
+        public Long getIdTratamiento() { return idTratamiento; }
+        public void setIdTratamiento(Long idTratamiento) { this.idTratamiento = idTratamiento; }
+
+        public Long getIdReportes() { return idReportes; }
+        public void setIdReportes(Long idReportes) { this.idReportes = idReportes; }
     }
 }

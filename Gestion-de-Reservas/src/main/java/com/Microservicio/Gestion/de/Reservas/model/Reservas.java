@@ -32,4 +32,14 @@ public class Reservas {
 
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
+
+
+    @Column (name = "id_reportes")
+    private Long idReportes;
+
+    @Column (name = "id_historial_clinico")
+    private Long idHistorial;
+
+
+    
 }

@@ -23,17 +23,19 @@ public class HistorialClinicoService {
         return historialClinicoRepository.findById(id).orElseThrow();
     }
 
-    public HistorialClinico crearHistorial(Date fechaHistorial, String antecedentes, String comentarios, String diagnostico) {
-        HistorialClinico nuevo = new HistorialClinico(null, fechaHistorial, antecedentes, comentarios, diagnostico);
+    public HistorialClinico crearHistorial(Date fechaHistorial, String antecedentes, String comentarios, String diagnostico, long idTratamiento, long idReportes) {
+        HistorialClinico nuevo = new HistorialClinico(null, fechaHistorial, antecedentes, comentarios, diagnostico, idTratamiento, idReportes);
         return historialClinicoRepository.save(nuevo);
     }
 
-    public HistorialClinico actualizarHistorial(Long id, Date fechaHistorial, String antecedentes, String comentarios, String diagnostico) {
+    public HistorialClinico actualizarHistorial(Long id, Date fechaHistorial, String antecedentes, String comentarios, String diagnostico, Long idTratamiento, Long idReportes) {
         HistorialClinico historial = obtenerHistorialPorId(id);
         historial.setFechaHistorial(fechaHistorial);
         historial.setAntecedentees(antecedentes);
         historial.setComentarios(comentarios);
         historial.setDiagnostico(diagnostico);
+        historial.setIdTratamiento(idTratamiento);
+        historial.setIdReportes(idReportes);
         return historialClinicoRepository.save(historial);
     }
 

@@ -33,4 +33,7 @@ public class Producto {
 
     @Column(name = "precio", nullable = false)
     private Double precio;
+
+    @Column (name = "id_reportes")
+    private Long idReportes;
 }

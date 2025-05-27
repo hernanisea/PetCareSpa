@@ -38,5 +38,11 @@ public class HistorialClinico {
     @Column(length = 500)
     private String diagnostico;
 
+    @Column(name = "id_tratamiento")
+    private Long idTratamiento;
+    
+    @Column(name ="id_reportes")
+    private long idReportes;
+
     
 }
