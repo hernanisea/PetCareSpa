@@ -1,15 +1,18 @@
 package com.Microservicios.GestionUsuarios.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
 import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
@@ -26,7 +29,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario crearUsuario(String nombre, String apellido, String correo, String clave,
-                                Boolean estado, String telefono, Long idDireccion, Long id) {
+                                Boolean estado, String telefono, Long idDireccion, Long idMascota, Long idComentario, Long idNotifacion, Long idReportes,Long idHistorial, Long id) {
 
         if (usuarioRepository.existsByCorreo(correo)) {
             throw new RuntimeException("Ya existe un usuario con el correo: " + correo);
@@ -43,6 +46,11 @@ public class UsuarioService {
         usuario.setEstado(estado);
         usuario.setTelefono(telefono);
         usuario.setIdDireccion(idDireccion);
+        usuario.setIdMascota(idMascota);
+        usuario.setIdComentario(idComentario);
+        usuario.setIdNotificacion(idNotifacion);
+        usuario.setIdReportes(idReportes);
+        usuario.setIdHistorial(idHistorial);
         usuario.setRol(rol);
 
         return usuarioRepository.save(usuario);
@@ -55,7 +63,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario actualizarUsuario(Long idUsuario, String nombre, String apellido, String correo, String clave,
-                                     Boolean estado, String telefono, Long idDireccion, Long id) {
+                                     Boolean estado, String telefono, Long idDireccion, Long idMascota, Long idComentario, Long idNotifacion, Long idReportes, Long idHistorial, Long id) {
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + idUsuario));
@@ -70,6 +78,11 @@ public class UsuarioService {
         usuario.setEstado(estado);
         usuario.setTelefono(telefono);
         usuario.setIdDireccion(idDireccion);
+        usuario.setIdMascota(idMascota);
+        usuario.setIdComentario(idComentario);
+        usuario.setIdNotificacion(idNotifacion);
+        usuario.setIdReportes(idReportes);
+        usuario.setIdHistorial(idHistorial);                                
         usuario.setRol(rol);
 
         return usuarioRepository.save(usuario);

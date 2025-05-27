@@ -48,9 +48,7 @@ public class MascotasService {
         mascota.setSexo(sexo);
         mascota.setPesoKg(pesoKg);
         mascota.setFechaRegistro(fechaRegistro);
-        mascota.setIdEspecie(idEspecie);
         mascota.setEspecie(especie);
-        mascota.setIdRaza(idRaza);
         mascota.setRaza(raza);
 
         return mascotaRepository.save(mascota);
@@ -80,9 +78,7 @@ public class MascotasService {
         mascota.setSexo(sexo);
         mascota.setPesoKg(pesoKg);
         mascota.setFechaRegistro(fechaRegistro);
-        mascota.setIdEspecie(idEspecie);
         mascota.setEspecie(especie);
-        mascota.setIdRaza(idRaza);
         mascota.setRaza(raza);
 
         return mascotaRepository.save(mascota);

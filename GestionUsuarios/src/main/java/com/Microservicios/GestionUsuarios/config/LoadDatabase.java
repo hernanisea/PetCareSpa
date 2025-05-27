@@ -24,12 +24,12 @@ public class LoadDatabase {
                 Rol gestorInventario = rolRepo.save(new Rol("Gestor de Inventario"));
                 Rol cliente = rolRepo.save(new Rol("Cliente"));
 
-                // Crear y guardar usuarios
-                usuarioRepo.save(crearUsuario("admin", "Admin", "admin@demo.com", "admin123", "10000001", 1L, adminSistema));
-                usuarioRepo.save(crearUsuario("coordinador", "Coordinador", "coord@demo.com", "coord123", "10000002", 2L, coordinadorClinica));
-                usuarioRepo.save(crearUsuario("vet", "Veterinario", "vet@demo.com", "vet123", "10000003", 3L, veterinario));
-                usuarioRepo.save(crearUsuario("inventario", "Inventario", "inv@demo.com", "inv123", "10000004", 4L, gestorInventario));
-                usuarioRepo.save(crearUsuario("cliente", "Cliente", "cliente@demo.com", "cliente123", "10000005", 5L, cliente));
+                // Crear y guardar usuarios con todos los campos
+                usuarioRepo.save(crearUsuario("admin", "Admin", "admin@demo.com", "admin123", "10000001", 1L, 1L, 1L, 1L, 1L, adminSistema));
+                usuarioRepo.save(crearUsuario("coordinador", "Coordinador", "coord@demo.com", "coord123", "10000002", 2L, 2L, 2L, 2L, 2L, coordinadorClinica));
+                usuarioRepo.save(crearUsuario("vet", "Veterinario", "vet@demo.com", "vet123", "10000003", 3L, 3L, 3L, 3L, 3L, veterinario));
+                usuarioRepo.save(crearUsuario("inventario", "Inventario", "inv@demo.com", "inv123", "10000004", 4L, 4L, 4L, 4L, 4L, gestorInventario));
+                usuarioRepo.save(crearUsuario("cliente", "Cliente", "cliente@demo.com", "cliente123", "10000005", 5L, 5L, 5L, 5L, 5L, cliente));
 
                 System.out.println("✅ Roles y usuarios iniciales cargados.");
             } else {
@@ -39,15 +39,21 @@ public class LoadDatabase {
     }
 
     private Usuario crearUsuario(String nombre, String apellido, String correo, String clave,
-                                 String telefono, Long idDireccion, Rol rol) {
+                                 String telefono, Long idDireccion,
+                                 Long idMascota, Long idComentario, Long idNotificacion, Long idHistorial,
+                                 Rol rol) {
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
         usuario.setCorreo(correo);
-        usuario.setClave(clave);  // Aquí podrías usar encriptación en el futuro
+        usuario.setClave(clave); // Se recomienda encriptar la clave en el futuro
         usuario.setEstado(true);
         usuario.setTelefono(telefono);
         usuario.setIdDireccion(idDireccion);
+        usuario.setIdMascota(idMascota);
+        usuario.setIdComentario(idComentario);
+        usuario.setIdNotificacion(idNotificacion);
+        usuario.setIdHistorial(idHistorial);
         usuario.setRol(rol);
         return usuario;
     }

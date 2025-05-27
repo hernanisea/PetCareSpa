@@ -1,13 +1,22 @@
 package com.Microservicios.GestionInventario.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.Microservicios.GestionInventario.model.Producto;
 import com.Microservicios.GestionInventario.model.Tratamiento;
 import com.Microservicios.GestionInventario.service.ProductoService;
 import com.Microservicios.GestionInventario.service.TratamientoService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/inventario")
@@ -25,15 +34,14 @@ public class InventarioController {
     // -------------------
     // Endpoints Producto
     // -------------------
-
     @GetMapping("/productos")
     public ResponseEntity<List<Producto>> listarProductos() {
         return ResponseEntity.ok(productoService.listarTodos());
     }
 
     @GetMapping("/productos/{id}")
-    public ResponseEntity<Producto> obtenerProducto(@PathVariable Long id) {
-        return ResponseEntity.ok(productoService.obtenerPorId(id));
+    public ResponseEntity<Producto> obtenerProducto(@PathVariable Long idProducto) {
+        return ResponseEntity.ok(productoService.obtenerPorId(idProducto));
     }
 
     @PostMapping("/productos")
@@ -42,8 +50,8 @@ public class InventarioController {
     }
 
     @PutMapping("/productos/{id}")
-    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
-        return ResponseEntity.ok(productoService.actualizar(id, producto));
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long idProducto, @RequestBody Producto producto) {
+        return ResponseEntity.ok(productoService.actualizar(idProducto, producto));
     }
 
     @DeleteMapping("/productos/{id}")
@@ -55,15 +63,14 @@ public class InventarioController {
     // ----------------------
     // Endpoints Tratamiento
     // ----------------------
-
     @GetMapping("/tratamientos")
     public ResponseEntity<List<Tratamiento>> listarTratamientos() {
         return ResponseEntity.ok(tratamientoService.listarTodos());
     }
 
     @GetMapping("/tratamientos/{id}")
-    public ResponseEntity<Tratamiento> obtenerTratamiento(@PathVariable Long id) {
-        return ResponseEntity.ok(tratamientoService.obtenerPorId(id));
+    public ResponseEntity<Tratamiento> obtenerTratamiento(@PathVariable Long idProducto) {
+        return ResponseEntity.ok(tratamientoService.obtenerPorId(idProducto));
     }
 
     @PostMapping("/tratamientos")
@@ -73,24 +80,40 @@ public class InventarioController {
     }
 
     @DeleteMapping("/tratamientos/{id}")
-    public ResponseEntity<Void> eliminarTratamiento(@PathVariable Long id) {
-        tratamientoService.eliminar(id);
+    public ResponseEntity<Void> eliminarTratamiento(@PathVariable Long idProducto) {
+        tratamientoService.eliminar(idProducto);
         return ResponseEntity.noContent().build();
     }
 
     // DTO interno para el POST de tratamientos
     public static class TratamientoRequest {
+
         private Integer cantidad;
         private Double subtotal;
         private Long idProducto;
 
-        public Integer getCantidad() { return cantidad; }
-        public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
+        public Integer getCantidad() {
+            return cantidad;
+        }
 
-        public Double getSubtotal() { return subtotal; }
-        public void setSubtotal(Double subtotal) { this.subtotal = subtotal; }
+        public void setCantidad(Integer cantidad) {
+            this.cantidad = cantidad;
+        }
 
-        public Long getIdProducto() { return idProducto; }
-        public void setIdProducto(Long idProducto) { this.idProducto = idProducto; }
+        public Double getSubtotal() {
+            return subtotal;
+        }
+
+        public void setSubtotal(Double subtotal) {
+            this.subtotal = subtotal;
+        }
+
+        public Long getIdProducto() {
+            return idProducto;
+        }
+
+        public void setIdProducto(Long idProducto) {
+            this.idProducto = idProducto;
+        }
     }
 }

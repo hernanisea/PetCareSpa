@@ -24,7 +24,7 @@ public class Notificacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idNotificacion;
 
     private Long clienteId;
 

@@ -46,6 +46,23 @@ public class Usuario {
 
     @Column(name = "id_direccion")
     private Long idDireccion;
+
+    @Column(name = "id_mascota")
+    private Long idMascota;
+
+    @Column(name = "id_comentario")
+    private Long idComentario;
+
+    @Column (name = "id_notificaciones")
+    private Long idNotificacion;
+    
+    @Column (name = "id_reportes")
+    private Long idReportes;
+
+    @Column (name = "id_historial_clinico")
+    private Long idHistorial;
+
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_rol", nullable = false, foreignKey = @ForeignKey(name = "FK_usuario_rol"))
     @com.fasterxml.jackson.annotation.JsonBackReference

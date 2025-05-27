@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 public class Raza {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "id_raza")
     private long idRaza;
 
     @Column(name = "nombre", nullable = false, length = 35, unique = true)

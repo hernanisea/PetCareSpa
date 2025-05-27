@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 public class Especie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_especie")
     private long idEspecie;
 
     @Column(name = "nombre", nullable = false, length = 35, unique = true)

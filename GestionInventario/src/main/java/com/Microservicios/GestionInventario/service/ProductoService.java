@@ -1,10 +1,11 @@
 package com.Microservicios.GestionInventario.service;
 
-import com.Microservicios.GestionInventario.model.Producto;
-import com.Microservicios.GestionInventario.repository.ProductoRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.Microservicios.GestionInventario.model.Producto;
+import com.Microservicios.GestionInventario.repository.ProductoRepository;
 
 @Service
 public class ProductoService {
@@ -19,17 +20,17 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
-    public Producto obtenerPorId(Long id) {
-        return productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
+    public Producto obtenerPorId(Long idProducto) {
+        return productoRepository.findById(idProducto)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + idProducto));
     }
 
     public Producto guardar(Producto producto) {
         return productoRepository.save(producto);
     }
 
-    public Producto actualizar(Long id, Producto productoActualizado) {
-        Producto existente = obtenerPorId(id);
+    public Producto actualizar(Long idProducto, Producto productoActualizado) {
+        Producto existente = obtenerPorId(idProducto);
         existente.setNombre(productoActualizado.getNombre());
         existente.setDescripcion(productoActualizado.getDescripcion());
         existente.setStock(productoActualizado.getStock());
