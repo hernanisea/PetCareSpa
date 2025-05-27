@@ -1,32 +1,36 @@
-package com.Microservicios.Gestion.de.Direcciones.model;
+package com.Microservicios.Reportes.model;
+
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "Comuna")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Comuna {
+@NoArgsConstructor
+@Entity
+@Table(name = "Reportes")
+
+public class Reporte {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idComuna;
+    private long idReportes;
 
-    @Column(nullable = false, length = 30)
-    private String nombre;
+    @Column(name = "titulo", nullable=true)
+    private String titulo;
 
-    @ManyToOne
-    @JoinColumn(name = "id_region", nullable = false)
-    private Region region; 
+    @Column(length=200)
+    private String descripcion;
+
+    @Column(nullable=true)
+    private Date fechaCreacion;
+
 }
-

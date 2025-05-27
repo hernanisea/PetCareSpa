@@ -33,7 +33,7 @@ public class Direccion {
 
     @ManyToOne
     @JoinColumn(name = "id_comuna", nullable = false)
-    private Comuna comuna; // ✔️ relación correcta
+    private Comuna comuna; 
 }
 
 
