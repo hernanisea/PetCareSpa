@@ -15,7 +15,7 @@ public class HistorialClinicoClient {
 
     public boolean existeHistorial(Long idHistorial) {
         try {
-            String url = "http://localhost:8085/historial/" + idHistorial; // Ajusta si el endpoint es diferente
+            String url = "http://localhost:8087/historial/" + idHistorial; // Ajusta si el endpoint es diferente
             restTemplate.getForObject(url, Object.class);
             return true;
         } catch (HttpClientErrorException.NotFound e) {

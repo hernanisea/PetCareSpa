@@ -5,17 +5,17 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class NotificacionClient {
+public class ReportesClient {
 
     private final RestTemplate restTemplate;
 
-    public NotificacionClient(RestTemplate restTemplate) {
+    public ReportesClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public boolean existeNotificacion(Long idNotificacion) {
+    public boolean existeReporte(Long idReportes) {
         try {
-            String url = "http://localhost:8088/notificaciones/" + idNotificacion; // Asegúrate que coincida con el endpoint real
+            String url = "http://localhost:8089/reportes/" + idReportes; // Asegúrate que coincida con tu endpoint real
             restTemplate.getForObject(url, Object.class);
             return true;
         } catch (HttpClientErrorException.NotFound e) {

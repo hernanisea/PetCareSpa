@@ -1,11 +1,21 @@
 package com.Microservicios.GestionMascotas.controller;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.Microservicios.GestionMascotas.model.Especie;
 import com.Microservicios.GestionMascotas.model.Mascotas;
@@ -85,50 +95,53 @@ public class GestionMascotasController {
     // --- Controlador de Mascotas ---
 
     @GetMapping
-    public ResponseEntity<List<Mascotas>> listarMascotas() {
-        return ResponseEntity.ok(mascotasService.obtenerMascotas());
+    public List<Mascotas> obtenerMascotas() {
+        return mascotasService.obtenerMascotas();
     }
 
+    // Obtener mascota por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Mascotas> obtenerMascota(@PathVariable Long id) {
-        return ResponseEntity.ok(mascotasService.obtenerMascotaPorId(id));
+    public Mascotas obtenerMascotaPorId(@PathVariable Long id) {
+        return mascotasService.obtenerMascotaPorId(id);
     }
 
+    // Crear una nueva mascota
     @PostMapping
-    public ResponseEntity<Mascotas> crearMascota(@RequestBody MascotaRequest request) {
-        Mascotas nueva = mascotasService.crearMascota(
-                request.getIdUsuario(),
-                request.getNombre(),
-                request.getEdad(),
-                request.getSexo(),
-                request.getPesoKg(),
-                request.getFechaRegistro(),
-                request.getIdEspecie(),
-                request.getIdRaza()
-        );
-        return ResponseEntity.ok(nueva);
+    public Mascotas crearMascota(
+            @RequestParam Integer idUsuario,
+            @RequestParam String nombre,
+            @RequestParam Integer edad,
+            @RequestParam String sexo,
+            @RequestParam Integer pesoKg,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaRegistro,
+            @RequestParam Long idEspecie,
+            @RequestParam Long idRaza,
+            @RequestParam(required = false) Long idReserva
+    ) {
+        return mascotasService.crearMascota(idUsuario, nombre, edad, sexo, pesoKg, fechaRegistro, idEspecie, idRaza, idReserva);
     }
 
+    // Actualizar mascota existente
     @PutMapping("/{id}")
-    public ResponseEntity<Mascotas> actualizarMascota(@PathVariable Long id, @RequestBody MascotaRequest request) {
-        Mascotas actualizada = mascotasService.actualizarMascota(
-                id,
-                request.getIdUsuario(),
-                request.getNombre(),
-                request.getEdad(),
-                request.getSexo(),
-                request.getPesoKg(),
-                request.getFechaRegistro(),
-                request.getIdEspecie(),
-                request.getIdRaza()
-        );
-        return ResponseEntity.ok(actualizada);
+    public Mascotas actualizarMascota(
+            @PathVariable Long id,
+            @RequestParam Integer idUsuario,
+            @RequestParam String nombre,
+            @RequestParam Integer edad,
+            @RequestParam String sexo,
+            @RequestParam Integer pesoKg,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaRegistro,
+            @RequestParam Long idEspecie,
+            @RequestParam Long idRaza,
+            @RequestParam(required = false) Long idReserva
+    ) {
+        return mascotasService.actualizarMascota(id, idUsuario, nombre, edad, sexo, pesoKg, fechaRegistro, idEspecie, idRaza, idReserva);
     }
 
+    // Eliminar mascota
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarMascota(@PathVariable Long id) {
+    public void eliminarMascota(@PathVariable Long id) {
         mascotasService.eliminarMascota(id);
-        return ResponseEntity.noContent().build();
     }
 
     // --- DTO interno para Mascota ---

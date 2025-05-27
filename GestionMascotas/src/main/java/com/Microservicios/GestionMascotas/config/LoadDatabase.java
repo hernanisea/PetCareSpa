@@ -40,19 +40,19 @@ public class LoadDatabase {
 
                 //Crear 5 mascotas
                 mascotasService.crearMascota(101, "Fido", 3, "Macho", 25, new Date(),
-                        canina.getIdEspecie(), labrador.getIdRaza());
+                        canina.getIdEspecie(), labrador.getIdRaza(), null);
 
                 mascotasService.crearMascota(102, "Mishi", 2, "Hembra", 4, new Date(),
-                        felina.getIdEspecie(), siames.getIdRaza());
+                        felina.getIdEspecie(), siames.getIdRaza(), null);
 
                 mascotasService.crearMascota(103, "Pío", 1, "Macho", 0, new Date(),
-                        ave.getIdEspecie(), canario.getIdRaza());
+                        ave.getIdEspecie(), canario.getIdRaza(), null);
 
                 mascotasService.crearMascota(104, "Bola", 1, "Hembra", 0, new Date(),
-                        roedor.getIdEspecie(), hamster.getIdRaza());
+                        roedor.getIdEspecie(), hamster.getIdRaza(), null);
 
                 mascotasService.crearMascota(105, "Rex", 4, "Macho", 2, new Date(),
-                        reptil.getIdEspecie(), iguana.getIdRaza());
+                        reptil.getIdEspecie(), iguana.getIdRaza(), null);
 
                 System.out.println(" Especies, razas y mascotas de ejemplo cargadas correctamente.");
             } else {

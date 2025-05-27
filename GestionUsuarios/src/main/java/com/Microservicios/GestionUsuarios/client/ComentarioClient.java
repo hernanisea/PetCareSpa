@@ -15,7 +15,7 @@ public class ComentarioClient {
 
     public boolean existeComentario(Long idComentario) {
         try {
-            String url = "http://localhost:8083/comentarios/" + idComentario; 
+            String url = "http://localhost:8080/comentarios/" + idComentario; 
             restTemplate.getForObject(url, Object.class);
             return true;
         } catch (HttpClientErrorException.NotFound e) {

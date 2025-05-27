@@ -15,7 +15,7 @@ public class DireccionClient {
 
     public boolean existeDireccion(Long idDireccion) {
         try {
-            String url = "http://localhost:8082/direccion/" + idDireccion;
+            String url = "http://localhost:8081/direccion/" + idDireccion;
             restTemplate.getForObject(url, Object.class);
             return true;
         } catch (HttpClientErrorException.NotFound e) {

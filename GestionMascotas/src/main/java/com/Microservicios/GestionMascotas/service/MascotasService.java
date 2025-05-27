@@ -33,7 +33,7 @@ public class MascotasService {
 
     @Transactional
     public Mascotas crearMascota(Integer idUsuario, String nombre, Integer edad, String sexo,
-                                 Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza) {
+                                 Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
 
         Especie especie = especieRepository.findById(idEspecie)
                 .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + idEspecie));
@@ -49,6 +49,7 @@ public class MascotasService {
         mascota.setPesoKg(pesoKg);
         mascota.setFechaRegistro(fechaRegistro);
         mascota.setEspecie(especie);
+        mascota.setIdReserva(idReserva);
         mascota.setRaza(raza);
 
         return mascotaRepository.save(mascota);
@@ -61,7 +62,7 @@ public class MascotasService {
 
     @Transactional
     public Mascotas actualizarMascota(Long idMascota, Integer idUsuario, String nombre, Integer edad, String sexo,
-                                      Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza) {
+                                      Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
 
         Mascotas mascota = mascotaRepository.findById(idMascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada con ID: " + idMascota));
@@ -79,6 +80,7 @@ public class MascotasService {
         mascota.setPesoKg(pesoKg);
         mascota.setFechaRegistro(fechaRegistro);
         mascota.setEspecie(especie);
+        mascota.setIdReserva(idReserva);
         mascota.setRaza(raza);
 
         return mascotaRepository.save(mascota);

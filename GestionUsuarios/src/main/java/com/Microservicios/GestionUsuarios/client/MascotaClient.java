@@ -15,7 +15,7 @@ public class MascotaClient {
 
     public boolean existeMascota(Long idMascota) {
         try {
-            String url = "http://localhost:8086/mascotas/" + idMascota; // Asegúrate que esta ruta existe en GestionMascotas
+            String url = "http://localhost:8085/mascotas/" + idMascota; // Asegúrate que esta ruta existe en GestionMascotas
             restTemplate.getForObject(url, Object.class);
             return true;
         } catch (HttpClientErrorException.NotFound e) {

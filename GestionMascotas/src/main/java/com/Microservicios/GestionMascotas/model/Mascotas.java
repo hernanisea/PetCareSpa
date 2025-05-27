@@ -46,6 +46,9 @@ public class Mascotas {
     @Column(length = 10, nullable = false)
     private Date fechaRegistro;
 
+    @Column(name = "id_reserva")
+    private Long idReserva;
+    
    
 
     @ManyToOne(fetch = FetchType.LAZY)

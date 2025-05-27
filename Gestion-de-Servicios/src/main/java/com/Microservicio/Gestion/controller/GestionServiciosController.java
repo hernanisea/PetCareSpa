@@ -87,6 +87,8 @@ public class GestionServiciosController {
                 request.getNombre(),
                 request.getDescripcion(),
                 request.getPrecio(),
+                request.getIdReserva(),
+                request.getIdComentario(),
                 tipo
         );
         return ResponseEntity.ok(nuevo);
@@ -100,6 +102,8 @@ public class GestionServiciosController {
                 request.getNombre(),
                 request.getDescripcion(),
                 request.getPrecio(),
+                request.getIdComentario(),
+                request.getIdReserva(),
                 tipo
         );
         return ResponseEntity.ok(actualizado);
@@ -118,5 +122,7 @@ public class GestionServiciosController {
         private String descripcion;
         private Integer precio;
         private Long idTipo;
+        private Long idReserva;
+        private Long idComentario; // <--- AÑADIDO
     }
 }

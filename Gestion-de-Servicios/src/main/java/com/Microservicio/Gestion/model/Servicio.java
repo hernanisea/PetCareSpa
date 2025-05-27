@@ -37,7 +37,13 @@ public class Servicio {
 
     @Column(name = "id_tipo")
     private Long idTipo;
+
+    @Column(name = "id_comentario")
+    private Long idComentario;
     
+    @Column(name = "id_reserva")
+    private Long idReserva;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo", nullable = false, foreignKey = @ForeignKey(name = "FK_servicio_tipoServicio"))
     @com.fasterxml.jackson.annotation.JsonBackReference
