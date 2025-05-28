@@ -2,6 +2,8 @@ package com.Microservicios.HistorialClinico.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +26,8 @@ public class HistorialClinico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHistorial;
-
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private Date fechaHistorial;
 

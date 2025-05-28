@@ -23,8 +23,8 @@ public class NotificacionService {
     }
 
 
-    public List<Notificacion> obtenerPorCliente(Long clienteId){
-        return notificacionRepository.findByClienteId(clienteId);
+    public List<Notificacion> obtenerPorUsuario(Long usuarioId){
+        return notificacionRepository.findByUsuarioId(usuarioId);
 
     }
 

@@ -37,9 +37,9 @@ public class NotificacionController {
     }
 
     // GET /notificaciones/cliente/{clienteId}
-    @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<Notificacion>> obtenerPorCliente(@PathVariable Long clienteId) {
-        List<Notificacion> lista = notificacionService.obtenerPorCliente(clienteId);
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<List<Notificacion>> obtenerPorUsuario(@PathVariable Long usuarioId) {
+        List<Notificacion> lista = notificacionService.obtenerPorUsuario(usuarioId);
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

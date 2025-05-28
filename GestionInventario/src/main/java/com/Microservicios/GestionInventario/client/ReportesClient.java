@@ -15,7 +15,7 @@ public class ReportesClient {
 
     public boolean existeReporte(Long idReportes) {
         try {
-            String url = "http://localhost:8089/reportes/" + idReportes; // Asegúrate que coincida con tu endpoint real
+            String url = "http://localhost:8089/reportes/" + idReportes; 
             restTemplate.getForObject(url, Object.class);
             return true;
         } catch (HttpClientErrorException.NotFound e) {

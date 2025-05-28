@@ -40,7 +40,7 @@ public class InventarioController {
     }
 
     @GetMapping("/productos/{id}")
-    public ResponseEntity<Producto> obtenerProducto(@PathVariable Long idProducto) {
+    public ResponseEntity<Producto> obtenerProducto(@PathVariable("id") Long idProducto) {
         return ResponseEntity.ok(productoService.obtenerPorId(idProducto));
     }
 
@@ -50,13 +50,13 @@ public class InventarioController {
     }
 
     @PutMapping("/productos/{id}")
-    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long idProducto, @RequestBody Producto producto) {
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable("id")  Long idProducto, @RequestBody Producto producto) {
         return ResponseEntity.ok(productoService.actualizar(idProducto, producto));
     }
 
     @DeleteMapping("/productos/{id}")
-    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
-        productoService.eliminar(id);
+    public ResponseEntity<Void> eliminarProducto(@PathVariable("id")  Long idProducto) {
+        productoService.eliminar(idProducto);
         return ResponseEntity.noContent().build();
     }
 
@@ -69,7 +69,7 @@ public class InventarioController {
     }
 
     @GetMapping("/tratamientos/{id}")
-    public ResponseEntity<Tratamiento> obtenerTratamiento(@PathVariable Long idProducto) {
+    public ResponseEntity<Tratamiento> obtenerTratamiento(@PathVariable("id")  Long idProducto) {
         return ResponseEntity.ok(tratamientoService.obtenerPorId(idProducto));
     }
 
@@ -80,7 +80,7 @@ public class InventarioController {
     }
 
     @DeleteMapping("/tratamientos/{id}")
-    public ResponseEntity<Void> eliminarTratamiento(@PathVariable Long idProducto) {
+    public ResponseEntity<Void> eliminarTratamiento(@PathVariable("id")  Long idProducto) {
         tratamientoService.eliminar(idProducto);
         return ResponseEntity.noContent().build();
     }

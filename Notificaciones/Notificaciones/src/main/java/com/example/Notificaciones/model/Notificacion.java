@@ -12,7 +12,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.NoArgsConstructor; 
 
 
 @Entity
@@ -26,7 +26,8 @@ public class Notificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idNotificacion;
 
-    private Long clienteId;
+    @Column(name = "usuarioId", length = 20)
+    private Long usuarioId;
 
     @Column(nullable = false, length = 255)
     private String mensaje;
