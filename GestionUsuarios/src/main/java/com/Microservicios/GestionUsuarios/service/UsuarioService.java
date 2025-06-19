@@ -49,7 +49,6 @@ public class UsuarioService {
         usuario.setIdMascota(idMascota);
         usuario.setIdComentario(idComentario);
         usuario.setIdNotificacion(idNotifacion);
-        usuario.setIdReportes(idReportes);
         usuario.setIdHistorial(idHistorial);
         usuario.setRol(rol);
 
@@ -81,7 +80,7 @@ public class UsuarioService {
         usuario.setIdMascota(idMascota);
         usuario.setIdComentario(idComentario);
         usuario.setIdNotificacion(idNotifacion);
-        usuario.setIdReportes(idReportes);
+
         usuario.setIdHistorial(idHistorial);                                
         usuario.setRol(rol);
 

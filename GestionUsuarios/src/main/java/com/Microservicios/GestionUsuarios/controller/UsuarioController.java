@@ -74,8 +74,7 @@ public class UsuarioController {
         usuario.setIdMascota(request.getIdMascota());
         usuario.setIdComentario(request.getIdComentario());
         usuario.setIdNotificacion(request.getIdNotificacion());
-        usuario.setIdReportes(request.getIdReportes());
-        usuario.setIdHistorial(request.getIdHistorial());
+      usuario.setIdHistorial(request.getIdHistorial());
         usuario.setRol(rol);
 
         return ResponseEntity.ok(usuarioRepository.save(usuario));
@@ -100,7 +99,7 @@ public class UsuarioController {
         usuario.setIdMascota(request.getIdMascota());
         usuario.setIdComentario(request.getIdComentario());
         usuario.setIdNotificacion(request.getIdNotificacion());
-        usuario.setIdReportes(request.getIdReportes());
+
         usuario.setIdHistorial(request.getIdHistorial());
         usuario.setRol(rol);
 

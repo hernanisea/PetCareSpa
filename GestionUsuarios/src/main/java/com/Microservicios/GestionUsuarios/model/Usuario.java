@@ -1,24 +1,14 @@
 package com.Microservicios.GestionUsuarios.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "usuarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Usuario {
 
     @Id
@@ -44,22 +34,19 @@ public class Usuario {
     @Column(name = "telefono", length = 20)
     private String telefono;
 
-    @Column(name = "id_direccion")
+    @Column(nullable = false)
     private Long idDireccion;
 
-    @Column(name = "id_mascota")
+    @Column(nullable = false)
     private Long idMascota;
 
-    @Column(name = "id_comentario")
+    @Column(nullable = false)
     private Long idComentario;
 
-    @Column (name = "id_notificaciones")
+    @Column (nullable = false)
     private Long idNotificacion;
     
-    @Column (name = "id_reportes")
-    private Long idReportes;
-
-    @Column (name = "id_historial_clinico")
+    @Column (nullable = false)
     private Long idHistorial;
 
     
