@@ -31,9 +31,9 @@ public class LoadDatabase {
                 usuarioRepo.save(crearUsuario("inventario", "Inventario", "inv@demo.com", "inv123", "10000004", 4L, 4L, 4L, 4L, 4L, 0, gestorInventario));
                 usuarioRepo.save(crearUsuario("cliente", "Cliente", "cliente@demo.com", "cliente123", "10000005", 5L, 5L, 5L, 5L, 5L, 0, cliente));
 
-                System.out.println("✅ Roles y usuarios iniciales cargados.");
+                System.out.println("Roles y usuarios iniciales cargados.");
             } else {
-                System.out.println("⚠️ Los datos ya existen. No se cargaron nuevos registros.");
+                System.out.println("Los datos ya existen. No se cargaron nuevos registros.");
             }
         };
     }
