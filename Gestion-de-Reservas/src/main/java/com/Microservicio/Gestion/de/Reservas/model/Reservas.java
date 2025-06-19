@@ -2,6 +2,8 @@ package com.Microservicio.Gestion.de.Reservas.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,17 +35,12 @@ public class Reservas {
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 
-    @Column(nullable = false)
+    @JsonIgnore
+    @Column(name = "usuario_id", nullable = false)
     private Long usuarioId;
 
-    @Column(nullable = false)
+    @JsonIgnore
+    @Column(name = "mascota_id", nullable = false)
     private Long mascotaId;
-
-    @Column(nullable = false)
-    private Long veterinarioId;
-
-    
-
-
-    
 }
+
