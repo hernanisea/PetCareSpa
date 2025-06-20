@@ -13,41 +13,40 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Long id;
+    private Long idUsuario;
 
-    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
-
-    @Column(name = "apellido", nullable = false, length = 50)
     private String apellido;
 
-    @Column(name = "correo", nullable = false, unique = true, length = 100)
+    @Column(unique = true, nullable = false)
     private String correo;
 
-    @Column(name = "clave", nullable = false)
+    @Column(nullable = false)
     private String clave;
 
-    @Column(name = "estado", nullable = false)
     private Boolean estado;
 
-    @Column(name = "telefono", length = 20)
     private String telefono;
 
-    @Column(nullable = false)
+    // ⚠️ Campos opcionales marcados como nullable = true
+    @Column(name = "id_direccion", nullable = true)
     private Long idDireccion;
 
-    @Column(nullable = false)
+    @Column(name = "id_mascota", nullable = true)
     private Long idMascota;
 
-    @Column(nullable = false)
+    @Column(name = "id_comentario", nullable = true)
     private Long idComentario;
 
-    @Column (nullable = false)
+    @Column(name = "id_notificacion", nullable = true)
     private Long idNotificacion;
-    
-    @Column (nullable = false)
+
+    @Column(name = "id_reportes", nullable = true)
+    private Long idReportes;
+
+    @Column(name = "id_historial", nullable = true)
     private Long idHistorial;
+
 
     
     @ManyToOne(fetch = FetchType.LAZY)
