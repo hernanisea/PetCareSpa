@@ -11,6 +11,7 @@ import com.Microservicios.GestionMascotas.model.Raza;
 import com.Microservicios.GestionMascotas.repository.EspecieRepository;
 import com.Microservicios.GestionMascotas.repository.MascotaRepository;
 import com.Microservicios.GestionMascotas.repository.RazaRepository;
+import com.Microservicios.GestionMascotas.webclient.UsuarioClient;
 
 import jakarta.transaction.Transactional;
 
@@ -20,20 +21,43 @@ public class MascotasService {
     private final MascotaRepository mascotaRepository;
     private final EspecieRepository especieRepository;
     private final RazaRepository razaRepository;
+    private final UsuarioClient usuarioClient;
 
-    public MascotasService(MascotaRepository mascotaRepository, EspecieRepository especieRepository, RazaRepository razaRepository) {
+    public MascotasService(MascotaRepository mascotaRepository, EspecieRepository especieRepository,
+            RazaRepository razaRepository, UsuarioClient usuarioClient) {
         this.mascotaRepository = mascotaRepository;
         this.especieRepository = especieRepository;
         this.razaRepository = razaRepository;
+        this.usuarioClient = usuarioClient;
     }
 
     public List<Mascotas> obtenerMascotas() {
         return mascotaRepository.findAll();
     }
 
+    public List<Mascotas> obtenerPorUsuario(Long idUsuario) {
+        usuarioClient.validarUsuarioExiste(idUsuario);
+        return mascotaRepository.findByIdUsuario(idUsuario);
+    }
+
+    public List<Mascotas> obtenerPorEspecie(Long idEspecie) {
+        return mascotaRepository.findByEspecieIdEspecie(idEspecie);
+    }
+
+    public List<Mascotas> obtenerPorRaza(Long idRaza) {
+        return mascotaRepository.findByRazaIdRaza(idRaza);
+    }
+
+    public Mascotas obtenerMascotaPorId(Long idMascota) {
+        return mascotaRepository.findById(idMascota)
+                .orElseThrow(() -> new RuntimeException("Mascota no encontrada con ID: " + idMascota));
+    }
+
     @Transactional
-    public Mascotas crearMascota(Integer idUsuario, String nombre, Integer edad, String sexo,
-                                 Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+    public Mascotas crearMascota(Long idUsuario, String nombre, Integer edad, String sexo,
+            Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+
+        usuarioClient.validarUsuarioExiste(idUsuario);
 
         Especie especie = especieRepository.findById(idEspecie)
                 .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + idEspecie));
@@ -55,14 +79,11 @@ public class MascotasService {
         return mascotaRepository.save(mascota);
     }
 
-    public Mascotas obtenerMascotaPorId(Long idMascota) {
-        return mascotaRepository.findById(idMascota)
-                .orElseThrow(() -> new RuntimeException("Mascota no encontrada con ID: " + idMascota));
-    }
-
     @Transactional
-    public Mascotas actualizarMascota(Long idMascota, Integer idUsuario, String nombre, Integer edad, String sexo,
-                                      Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+    public Mascotas actualizarMascota(Long idMascota, Long idUsuario, String nombre, Integer edad, String sexo,
+            Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+
+        usuarioClient.validarUsuarioExiste(idUsuario);
 
         Mascotas mascota = mascotaRepository.findById(idMascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada con ID: " + idMascota));

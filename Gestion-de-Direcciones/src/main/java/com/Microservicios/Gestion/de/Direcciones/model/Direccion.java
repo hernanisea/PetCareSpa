@@ -34,6 +34,9 @@ public class Direccion {
     @ManyToOne
     @JoinColumn(name = "id_comuna", nullable = false)
     private Comuna comuna; 
+
+    @Column(nullable = false)
+    private Long usuarioId;
 }
 
 

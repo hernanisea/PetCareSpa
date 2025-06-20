@@ -21,15 +21,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Mascotas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMascota;
 
-    @Column(length = 3, nullable = false, unique = true)
-    private Integer idUsuario;
+    @Column(nullable = false)
+    private Long idUsuario;
 
     @Column(length = 100, nullable = false)
     private String nombre;
@@ -48,18 +47,14 @@ public class Mascotas {
 
     @Column(name = "id_reserva")
     private Long idReserva;
-    
-   
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_especie", nullable = false, foreignKey = @ForeignKey(name = "FK_mascotas_especie"))
     @com.fasterxml.jackson.annotation.JsonBackReference
     private Especie especie;
 
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_raza", nullable = false, foreignKey = @ForeignKey(name = "FK_mascotas_raza"))
     @com.fasterxml.jackson.annotation.JsonBackReference
     private Raza raza;
-
 }
