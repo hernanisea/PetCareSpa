@@ -13,11 +13,10 @@ public class JwtUtil {
 
     public String extraerCorreoDesdeToken(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey.getBytes()) // si usas string base64
+                .setSigningKey(secretKey.getBytes())
                 .build()
                 .parseClaimsJws(token.replace("Bearer ", ""))
                 .getBody();
-
-        return claims.getSubject(); // generalmente el correo o nombre de usuario va como "sub"
+        return claims.getSubject();
     }
 }

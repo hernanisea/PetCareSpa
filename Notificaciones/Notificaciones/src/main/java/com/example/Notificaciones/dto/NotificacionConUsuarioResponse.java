@@ -11,7 +11,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificacionConUsuarioResponse {
-
     private Notificacion notificacion;
     private Map<String, Object> usuario;
 }

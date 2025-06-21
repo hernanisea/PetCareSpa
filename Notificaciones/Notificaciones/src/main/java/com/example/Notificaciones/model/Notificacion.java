@@ -1,19 +1,11 @@
 package com.example.Notificaciones.model;
 
-import java.util.Date;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor; 
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
 
 @Entity
 @Table(name = "notificacion")
@@ -38,4 +30,6 @@ public class Notificacion {
     @Column(nullable = false)
     private boolean leido;
 
+    @Column(name = "creado_por", length = 100)
+    private String creadoPor;
 }
