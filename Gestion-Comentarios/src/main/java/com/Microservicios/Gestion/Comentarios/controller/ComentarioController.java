@@ -1,8 +1,8 @@
 package com.Microservicios.Gestion.Comentarios.controller;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Microservicios.Gestion.Comentarios.dto.ComentarioRequest;
 import com.Microservicios.Gestion.Comentarios.model.Comentario;
 import com.Microservicios.Gestion.Comentarios.service.ComentarioService;
 
@@ -22,7 +23,6 @@ import com.Microservicios.Gestion.Comentarios.service.ComentarioService;
 @CrossOrigin(origins = "*")
 public class ComentarioController {
 
-    @Autowired
     private final ComentarioService comentarioService;
 
     public ComentarioController(ComentarioService comentarioService) {
@@ -41,27 +41,12 @@ public class ComentarioController {
 
     @PostMapping
     public ResponseEntity<Comentario> crearComentario(@RequestBody ComentarioRequest request) {
-        Comentario nuevo = comentarioService.crearComentario(
-                request.getContenido(),
-                request.getFechaCreacion(),
-                request.getEstado(),
-                request.getIdUsuario(),
-                request.getIdReserva()
-        );
-        return ResponseEntity.ok(nuevo);
+        return ResponseEntity.ok(comentarioService.crearComentario(request));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Comentario> actualizarComentario(@PathVariable Long id, @RequestBody ComentarioRequest request) {
-        Comentario actualizado = comentarioService.actualizarComentario(
-                id,
-                request.getContenido(),
-                request.getFechaCreacion(),
-                request.getEstado(),
-                request.getIdUsuario(),
-                request.getIdReserva()
-        );
-        return ResponseEntity.ok(actualizado);
+        return ResponseEntity.ok(comentarioService.actualizarComentario(id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -70,27 +55,13 @@ public class ComentarioController {
         return ResponseEntity.noContent().build();
     }
 
-    // DTO de entrada
-    public static class ComentarioRequest {
-        private String contenido;
-        private String fechaCreacion;
-        private Boolean estado;
-        private Long idUsuario;
-        private Long idReserva;
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<Comentario>> obtenerComentariosPorUsuario(@PathVariable Long idUsuario) {
+        return ResponseEntity.ok(comentarioService.obtenerPorUsuario(idUsuario));
+    }
 
-        public String getContenido() { return contenido; }
-        public void setContenido(String contenido) { this.contenido = contenido; }
-
-        public String getFechaCreacion() { return fechaCreacion; }
-        public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
-
-        public Boolean getEstado() { return estado; }
-        public void setEstado(Boolean estado) { this.estado = estado; }
-
-        public Long getIdUsuario() { return idUsuario; }
-        public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }
-
-        public Long getIdReserva() { return idReserva; }
-        public void setIdReserva(Long idReserva) { this.idReserva = idReserva; }
+    @GetMapping("/usuario-detalle/{idUsuario}")
+    public ResponseEntity<Map<String, Object>> obtenerComentariosConUsuario(@PathVariable Long idUsuario) {
+        return ResponseEntity.ok(comentarioService.obtenerConUsuario(idUsuario));
     }
 }
