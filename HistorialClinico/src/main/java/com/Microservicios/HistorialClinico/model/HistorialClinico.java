@@ -21,31 +21,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HistorialClinico {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHistorial;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(nullable = false)
-    private Date fechaHistorial;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "fecha_historial", nullable = false)
+    private Date fecha;
 
     @Column(length = 500)
-    private String antecedentees;
+    private String antecedentes;
 
-     @Column(length = 500)
+    @Column(length = 500)
     private String comentarios;
 
     @Column(length = 500)
     private String diagnostico;
 
-    @Column(name = "id_tratamiento")
-    private Long idTratamiento;
-    
-    @Column(name ="id_reportes")
-    private long idReportes;
+    @Column(name = "usuario_id", nullable = false)
+    private Long usuarioId;
 
-    
-}
+    @Column(name = "mascota_id", nullable = false)
+    private Long mascotaId;
+} 

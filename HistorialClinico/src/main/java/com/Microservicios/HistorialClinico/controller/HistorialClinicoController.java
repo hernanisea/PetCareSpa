@@ -1,9 +1,7 @@
 package com.Microservicios.HistorialClinico.controller;
 
-import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Microservicios.HistorialClinico.dto.HistorialClinicoRequest;
 import com.Microservicios.HistorialClinico.model.HistorialClinico;
 import com.Microservicios.HistorialClinico.service.HistorialClinicoService;
 
@@ -23,7 +22,6 @@ import com.Microservicios.HistorialClinico.service.HistorialClinicoService;
 @CrossOrigin(origins = "*")
 public class HistorialClinicoController {
 
-    @Autowired
     private final HistorialClinicoService historialClinicoService;
 
     public HistorialClinicoController(HistorialClinicoService historialClinicoService) {
@@ -32,39 +30,25 @@ public class HistorialClinicoController {
 
     @GetMapping
     public ResponseEntity<List<HistorialClinico>> listarHistoriales() {
-        return ResponseEntity.ok(historialClinicoService.obtenerHistoriales());
+        return ResponseEntity.ok(historialClinicoService.listarHistoriales());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<HistorialClinico> obtenerHistorial(@PathVariable Long id) {
-        return ResponseEntity.ok(historialClinicoService.obtenerHistorialPorId(id));
+        return ResponseEntity.ok(historialClinicoService.listarHistoriales().stream()
+                .filter(h -> h.getIdHistorial().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Historial no encontrado")));
     }
 
     @PostMapping
-    public ResponseEntity<HistorialClinico> crearHistorial(@RequestBody HistorialRequest request) {
-        HistorialClinico nuevo = historialClinicoService.crearHistorial(
-                request.getFechaHistorial(),
-                request.getAntecedentes(),
-                request.getComentarios(),
-                request.getDiagnostico(),
-                request.getIdTratamiento(),
-                request.getIdReportes()
-        );
-        return ResponseEntity.ok(nuevo);
+    public ResponseEntity<HistorialClinico> crearHistorial(@RequestBody HistorialClinicoRequest request) {
+        return ResponseEntity.ok(historialClinicoService.guardarHistorial(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HistorialClinico> actualizarHistorial(@PathVariable Long id, @RequestBody HistorialRequest request) {
-        HistorialClinico actualizado = historialClinicoService.actualizarHistorial(
-                id,
-                request.getFechaHistorial(),
-                request.getAntecedentes(),
-                request.getComentarios(),
-                request.getDiagnostico(),
-                request.getIdTratamiento(),
-                request.getIdReportes()
-        );
-        return ResponseEntity.ok(actualizado);
+    public ResponseEntity<HistorialClinico> actualizarHistorial(@PathVariable Long id, @RequestBody HistorialClinicoRequest request) {
+        return ResponseEntity.ok(historialClinicoService.actualizarHistorial(id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -72,32 +56,4 @@ public class HistorialClinicoController {
         historialClinicoService.eliminarHistorial(id);
         return ResponseEntity.noContent().build();
     }
-
-    // DTO de entrada
-    public static class HistorialRequest {
-        private Date fechaHistorial;
-        private String antecedentes;
-        private String comentarios;
-        private String diagnostico;
-        private Long idTratamiento;
-        private Long idReportes;
-
-        public Date getFechaHistorial() { return fechaHistorial; }
-        public void setFechaHistorial(Date fechaHistorial) { this.fechaHistorial = fechaHistorial; }
-
-        public String getAntecedentes() { return antecedentes; }
-        public void setAntecedentes(String antecedentes) { this.antecedentes = antecedentes; }
-
-        public String getComentarios() { return comentarios; }
-        public void setComentarios(String comentarios) { this.comentarios = comentarios; }
-
-        public String getDiagnostico() { return diagnostico; }
-        public void setDiagnostico(String diagnostico) { this.diagnostico = diagnostico; }
-
-        public Long getIdTratamiento() { return idTratamiento; }
-        public void setIdTratamiento(Long idTratamiento) { this.idTratamiento = idTratamiento; }
-
-        public Long getIdReportes() { return idReportes; }
-        public void setIdReportes(Long idReportes) { this.idReportes = idReportes; }
-    }
-}
+}  

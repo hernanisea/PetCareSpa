@@ -1,4 +1,4 @@
-package com.Microservicios.HistorialClinico.client;
+package com.Microservicios.HistorialClinico.webclient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;

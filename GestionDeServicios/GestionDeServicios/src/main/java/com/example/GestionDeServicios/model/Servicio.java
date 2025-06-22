@@ -1,19 +1,10 @@
 package com.example.GestionDeServicios.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Entity
 @Table(name = "servicio")
@@ -22,27 +13,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Servicio {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_servicio")
     private Long idServicio;
 
-
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-
-    @Column(name = "descripcion",length= 100, nullable = false)
+    @Column(name = "descripcion", length = 100, nullable = false)
     private String descripcion;
-
 
     @Column(name = "precio", nullable = false)
     private Integer precio;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo", nullable = false, foreignKey = @ForeignKey(name = "FK_servicio_tipoServicio"))
-    @com.fasterxml.jackson.annotation.JsonBackReference
+    @JsonBackReference
     private TipoServicio tipoServicio;
 }
