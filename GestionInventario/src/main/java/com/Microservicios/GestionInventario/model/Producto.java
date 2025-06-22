@@ -34,9 +34,9 @@ public class Producto {
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
+    @Column(name = "stock_minimo", nullable = false)
+    private Integer stockMinimo;
+
     @Column(name = "precio", nullable = false)
     private Double precio;
-
-    @Column (name = "id_reportes")
-    private Long idReportes;
-}
+} 

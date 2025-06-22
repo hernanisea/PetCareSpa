@@ -46,6 +46,3 @@ public class ComunaController {
         comunaService.delete(id);
     }
 }
-
-
-

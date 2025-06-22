@@ -15,7 +15,7 @@ import com.Microservicios.Gestion.de.Direcciones.model.Direccion;
 import com.Microservicios.Gestion.de.Direcciones.service.DireccionService;
 
 @RestController
-@RequestMapping("/api/v1/direccion")
+@RequestMapping("/api/v1/direccion/direcciones")
 public class DireccionController {
 
     private final DireccionService direccionService;
@@ -24,29 +24,29 @@ public class DireccionController {
         this.direccionService = direccionService;
     }
 
-    @GetMapping("/direcciones")
+    @GetMapping
     public List<Direccion> findAllDirecciones() {
         return direccionService.findAll();
     }
 
-    @GetMapping("/direcciones/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Direccion> findDireccionById(@PathVariable Long id) {
         return direccionService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/direcciones/usuario/{usuarioId}")
+    @GetMapping("/usuario/{usuarioId}")
     public List<Direccion> getDireccionesByUsuarioId(@PathVariable Long usuarioId) {
         return direccionService.findByUsuarioId(usuarioId);
     }
 
-    @PostMapping("/direcciones")
+    @PostMapping
     public Direccion saveDireccion(@RequestBody Direccion direccion) {
         return direccionService.save(direccion);
     }
 
-    @DeleteMapping("/direcciones/{id}")
+    @DeleteMapping("/{id}")
     public void deleteDireccion(@PathVariable Long id) {
         direccionService.delete(id);
     }

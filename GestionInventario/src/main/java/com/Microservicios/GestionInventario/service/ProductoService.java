@@ -34,6 +34,7 @@ public class ProductoService {
         existente.setNombre(productoActualizado.getNombre());
         existente.setDescripcion(productoActualizado.getDescripcion());
         existente.setStock(productoActualizado.getStock());
+        existente.setStockMinimo(productoActualizado.getStockMinimo());
         existente.setPrecio(productoActualizado.getPrecio());
         return productoRepository.save(existente);
     }
@@ -43,7 +44,6 @@ public class ProductoService {
     }
 
     public List<Producto> obtenerStockBajo() {
-    return productoRepository.findByStockLessThanStockMinimo();
+        return productoRepository.findProductosConStockBajo();
     }
-
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.Microservicios.GestionInventario.dto.TratamientoRequest;
 import com.Microservicios.GestionInventario.model.Producto;
 import com.Microservicios.GestionInventario.model.Tratamiento;
 import com.Microservicios.GestionInventario.repository.ProductoRepository;
@@ -16,27 +17,34 @@ public class TratamientoService {
     private final TratamientoRepository tratamientoRepository;
     private final ProductoRepository productoRepository;
 
-    @Transactional
-    public Tratamiento crearTratamiento(Tratamiento tratamiento) {
-        Producto producto = productoRepository.findById(tratamiento.getProducto().getIdProducto())
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-
-        if (producto.getStock() < tratamiento.getCantidad()) {
-            throw new IllegalArgumentException("Stock insuficiente para aplicar tratamiento");
-        }
-
-        producto.setStock(producto.getStock() - tratamiento.getCantidad());
-        productoRepository.save(producto);
-
-        tratamiento.setSubtotal(tratamiento.getCantidad() * producto.getPrecio());
-        tratamiento.setProducto(producto);
-
-        return tratamientoRepository.save(tratamiento);
-    }
-
     public TratamientoService(TratamientoRepository tratamientoRepository, ProductoRepository productoRepository) {
         this.tratamientoRepository = tratamientoRepository;
         this.productoRepository = productoRepository;
+    }
+
+    @Transactional
+    public Tratamiento crearTratamiento(TratamientoRequest request) {
+        Producto producto = productoRepository.findById(request.getIdProducto())
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + request.getIdProducto()));
+
+        if (producto.getStock() < request.getCantidad()) {
+            throw new IllegalArgumentException("Stock insuficiente para aplicar tratamiento");
+        }
+
+        // Descontar stock
+        producto.setStock(producto.getStock() - request.getCantidad());
+        productoRepository.save(producto);
+
+        // Calcular subtotal
+        double subtotalCalculado = request.getCantidad() * producto.getPrecio();
+
+        // Crear y guardar tratamiento
+        Tratamiento tratamiento = new Tratamiento();
+        tratamiento.setCantidad(request.getCantidad());
+        tratamiento.setSubtotal(subtotalCalculado);
+        tratamiento.setProducto(producto);
+
+        return tratamientoRepository.save(tratamiento);
     }
 
     public List<Tratamiento> listarTodos() {
@@ -48,15 +56,12 @@ public class TratamientoService {
                 .orElseThrow(() -> new RuntimeException("Tratamiento no encontrado con ID: " + id));
     }
 
-    public Tratamiento guardar(Tratamiento tratamiento, Long idProducto) {
-        Producto producto = productoRepository.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + idProducto));
-        tratamiento.setProducto(producto);
-        return tratamientoRepository.save(tratamiento);
-    }
-
     public void eliminar(Long id) {
         tratamientoRepository.deleteById(id);
     }
 
+    public Tratamiento crearTratamientoConDto(Tratamiento tratamiento, Long idProducto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'crearTratamientoConDto'");
+    }
 }

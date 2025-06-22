@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Microservicios.GestionInventario.dto.TratamientoRequest;
 import com.Microservicios.GestionInventario.model.Producto;
 import com.Microservicios.GestionInventario.model.Tratamiento;
 import com.Microservicios.GestionInventario.service.ProductoService;
@@ -33,9 +34,6 @@ public class InventarioController {
         this.tratamientoService = tratamientoService;
     }
 
-    // -------------------
-    // Endpoints Producto
-    // -------------------
     @GetMapping("/productos")
     public ResponseEntity<List<Producto>> listarProductos() {
         return ResponseEntity.ok(productoService.listarTodos());
@@ -62,9 +60,6 @@ public class InventarioController {
         return ResponseEntity.noContent().build();
     }
 
-    // ----------------------
-    // Endpoints Tratamiento
-    // ----------------------
     @GetMapping("/tratamientos")
     public ResponseEntity<List<Tratamiento>> listarTratamientos() {
         return ResponseEntity.ok(tratamientoService.listarTodos());
@@ -81,8 +76,12 @@ public class InventarioController {
     }
 
     @PostMapping("/tratamientos")
-    public ResponseEntity<Tratamiento> crearTratamiento(@RequestBody @Validated Tratamiento tratamiento) {
-        Tratamiento nuevo = tratamientoService.crearTratamiento(tratamiento);
+    public ResponseEntity<Tratamiento> crearTratamiento(@RequestBody @Validated TratamientoRequest request) {
+        Tratamiento tratamiento = new Tratamiento();
+        tratamiento.setCantidad(request.getCantidad());
+        tratamiento.setSubtotal(request.getSubtotal());
+
+        Tratamiento nuevo = tratamientoService.crearTratamientoConDto(tratamiento, request.getIdProducto());
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
@@ -90,37 +89,5 @@ public class InventarioController {
     public ResponseEntity<Void> eliminarTratamiento(@PathVariable("id") Long idProducto) {
         tratamientoService.eliminar(idProducto);
         return ResponseEntity.noContent().build();
-    }
-
-    // DTO interno para el POST de tratamientos
-    public static class TratamientoRequest {
-
-        private Integer cantidad;
-        private Double subtotal;
-        private Long idProducto;
-
-        public Integer getCantidad() {
-            return cantidad;
-        }
-
-        public void setCantidad(Integer cantidad) {
-            this.cantidad = cantidad;
-        }
-
-        public Double getSubtotal() {
-            return subtotal;
-        }
-
-        public void setSubtotal(Double subtotal) {
-            this.subtotal = subtotal;
-        }
-
-        public Long getIdProducto() {
-            return idProducto;
-        }
-
-        public void setIdProducto(Long idProducto) {
-            this.idProducto = idProducto;
-        }
     }
 }
