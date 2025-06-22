@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.Microservicios.GestionMascotas.model.Especie;
 import com.Microservicios.GestionMascotas.model.Raza;
 import com.Microservicios.GestionMascotas.repository.RazaRepository;
 
@@ -27,6 +28,13 @@ public class RazaService {
     public Raza obtenerPorId(Long id) {
         return razaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + id));
+    }
+
+    public Raza actualizar(Long id, Raza raza) {
+        Raza existente = razaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Raza no encontrada"));
+        existente.setNombre(raza.getNombre());
+        return razaRepository.save(existente);
     }
 
     public Optional<Raza> buscarPorId(Long id) {

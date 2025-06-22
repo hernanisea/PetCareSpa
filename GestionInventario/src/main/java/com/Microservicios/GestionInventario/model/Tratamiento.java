@@ -1,5 +1,6 @@
 package com.Microservicios.GestionInventario.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -37,5 +38,6 @@ public class Tratamiento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto", nullable = false, foreignKey = @ForeignKey(name = "FK_tratamiento_producto"))
+    @JsonBackReference
     private Producto producto;
 }

@@ -30,12 +30,14 @@ public class ComentarioService {
     }
 
     public Comentario crearComentario(ComentarioRequest request) {
+        validarUsuarioExistente(request.getIdUsuario());
         Comentario nuevo = new Comentario(null, request.getContenido(), request.getFechaCreacion(),
                                            request.getEstado(), request.getIdUsuario(), request.getIdReserva());
         return comentarioRepository.save(nuevo);
     }
 
     public Comentario actualizarComentario(Long id, ComentarioRequest request) {
+        validarUsuarioExistente(request.getIdUsuario());
         Comentario comentario = obtenerComentarioPorId(id);
         comentario.setContenido(request.getContenido());
         comentario.setFechaCreacion(request.getFechaCreacion());
@@ -63,5 +65,13 @@ public class ComentarioService {
                 ),
                 "comentarios", comentarios
         );
+    }
+
+    private void validarUsuarioExistente(Long idUsuario) {
+        try {
+            usuarioClient.obtenerUsuarioPorId(idUsuario);
+        } catch (RuntimeException ex) {
+            throw new IllegalArgumentException("Usuario con ID " + idUsuario + " no existe.");
+        }
     }
 }

@@ -2,9 +2,12 @@ package com.Microservicios.GestionMascotas.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.Microservicios.GestionMascotas.dto.MascotaRequestDto;
+import com.Microservicios.GestionMascotas.dto.MascotaResponseDto;
 import com.Microservicios.GestionMascotas.model.Especie;
 import com.Microservicios.GestionMascotas.model.Mascotas;
 import com.Microservicios.GestionMascotas.model.Raza;
@@ -24,87 +27,81 @@ public class MascotasService {
     private final UsuarioClient usuarioClient;
 
     public MascotasService(MascotaRepository mascotaRepository, EspecieRepository especieRepository,
-            RazaRepository razaRepository, UsuarioClient usuarioClient) {
+                           RazaRepository razaRepository, UsuarioClient usuarioClient) {
         this.mascotaRepository = mascotaRepository;
         this.especieRepository = especieRepository;
         this.razaRepository = razaRepository;
         this.usuarioClient = usuarioClient;
     }
 
-    public List<Mascotas> obtenerMascotas() {
-        return mascotaRepository.findAll();
+    public List<MascotaResponseDto> obtenerPorUsuario(Long usuarioId) {
+        List<Mascotas> mascotas = (usuarioId != null) ?
+            mascotaRepository.findByIdUsuario(usuarioId) :
+            mascotaRepository.findAll();
+        return mascotas.stream().map(this::toResponseDto).collect(Collectors.toList());
     }
 
-    public List<Mascotas> obtenerPorUsuario(Long idUsuario) {
-        usuarioClient.validarUsuarioExiste(idUsuario);
-        return mascotaRepository.findByIdUsuario(idUsuario);
-    }
-
-    public List<Mascotas> obtenerPorEspecie(Long idEspecie) {
-        return mascotaRepository.findByEspecieIdEspecie(idEspecie);
-    }
-
-    public List<Mascotas> obtenerPorRaza(Long idRaza) {
-        return mascotaRepository.findByRazaIdRaza(idRaza);
-    }
-
-    public Mascotas obtenerMascotaPorId(Long idMascota) {
-        return mascotaRepository.findById(idMascota)
+    public MascotaResponseDto obtenerPorId(Long idMascota) {
+        Mascotas mascota = mascotaRepository.findById(idMascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada con ID: " + idMascota));
+        return toResponseDto(mascota);
     }
 
     @Transactional
-    public Mascotas crearMascota(Long idUsuario, String nombre, Integer edad, String sexo,
-            Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+    public MascotaResponseDto crearMascota(MascotaRequestDto dto) {
+        usuarioClient.validarUsuarioExiste(dto.getIdUsuario());
 
-        usuarioClient.validarUsuarioExiste(idUsuario);
+        Especie especie = especieRepository.findById(dto.getEspecieId())
+                .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + dto.getEspecieId()));
 
-        Especie especie = especieRepository.findById(idEspecie)
-                .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + idEspecie));
-
-        Raza raza = razaRepository.findById(idRaza)
-                .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + idRaza));
+        Raza raza = razaRepository.findById(dto.getRazaId())
+                .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + dto.getRazaId()));
 
         Mascotas mascota = new Mascotas();
-        mascota.setIdUsuario(idUsuario);
-        mascota.setNombre(nombre);
-        mascota.setEdad(edad);
-        mascota.setSexo(sexo);
-        mascota.setPesoKg(pesoKg);
-        mascota.setFechaRegistro(fechaRegistro);
+        mascota.setNombre(dto.getNombre());
+        mascota.setEdad(dto.getEdad());
+        mascota.setSexo(dto.getSexo());
+        mascota.setIdUsuario(dto.getIdUsuario());
+        mascota.setPesoKg(0);
+        mascota.setFechaRegistro(new Date());
         mascota.setEspecie(especie);
-        mascota.setIdReserva(idReserva);
         mascota.setRaza(raza);
+        Mascotas guardada = mascotaRepository.save(mascota);
 
-        return mascotaRepository.save(mascota);
+        return toResponseDto(guardada);
     }
 
     @Transactional
-    public Mascotas actualizarMascota(Long idMascota, Long idUsuario, String nombre, Integer edad, String sexo,
-            Integer pesoKg, Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+    public MascotaResponseDto crearMascotaDesdeParametros(Long idUsuario, String nombre, int edad, String sexo, int pesoKg,
+                                                          Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+        MascotaRequestDto dto = new MascotaRequestDto();
+        dto.setIdUsuario(idUsuario);
+        dto.setNombre(nombre);
+        dto.setEdad(edad);
+        dto.setSexo(sexo);
+        dto.setEspecieId(idEspecie);
+        dto.setRazaId(idRaza);
+        return crearMascota(dto);
+    }
 
-        usuarioClient.validarUsuarioExiste(idUsuario);
-
+    @Transactional
+    public MascotaResponseDto actualizarMascota(Long idMascota, MascotaRequestDto dto) {
         Mascotas mascota = mascotaRepository.findById(idMascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada con ID: " + idMascota));
 
-        Especie especie = especieRepository.findById(idEspecie)
-                .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + idEspecie));
+        Especie especie = especieRepository.findById(dto.getEspecieId())
+                .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + dto.getEspecieId()));
 
-        Raza raza = razaRepository.findById(idRaza)
-                .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + idRaza));
+        Raza raza = razaRepository.findById(dto.getRazaId())
+                .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + dto.getRazaId()));
 
-        mascota.setIdUsuario(idUsuario);
-        mascota.setNombre(nombre);
-        mascota.setEdad(edad);
-        mascota.setSexo(sexo);
-        mascota.setPesoKg(pesoKg);
-        mascota.setFechaRegistro(fechaRegistro);
+        mascota.setNombre(dto.getNombre());
+        mascota.setEdad(dto.getEdad());
+        mascota.setSexo(dto.getSexo());
         mascota.setEspecie(especie);
-        mascota.setIdReserva(idReserva);
         mascota.setRaza(raza);
 
-        return mascotaRepository.save(mascota);
+        return toResponseDto(mascotaRepository.save(mascota));
     }
 
     @Transactional
@@ -114,4 +111,16 @@ public class MascotasService {
         }
         mascotaRepository.deleteById(idMascota);
     }
-}
+
+    private MascotaResponseDto toResponseDto(Mascotas mascota) {
+        MascotaResponseDto dto = new MascotaResponseDto();
+        dto.setIdMascota(mascota.getIdMascota());
+        dto.setNombre(mascota.getNombre());
+        dto.setEdad(mascota.getEdad());
+        dto.setSexo(mascota.getSexo());
+        dto.setIdUsuario(mascota.getIdUsuario());
+        dto.setEspecie(mascota.getEspecie().getNombre());
+        dto.setRaza(mascota.getRaza().getNombre());
+        return dto;
+    }
+} 

@@ -34,19 +34,16 @@ public class DireccionConfig {
                 Comuna comuna4 = comunaRepo.save(new Comuna(null, "Concepción", region3));
                 Comuna comuna5 = comunaRepo.save(new Comuna(null, "Temuco", region4));
 
-                // Crear direcciones SOLO si el usuario existe (usuarioId debe existir)
-                try {
-                    direccionService.save(new Direccion(null, "Av. Libertador 101", "Cerca del centro", 8320000, comuna1, 1L));
-                    direccionService.save(new Direccion(null, "Calle Condell 202", null, 7500000, comuna2, 2L));
-                    direccionService.save(new Direccion(null, "Av. Perú 303", "Frente al mar", 2520000, comuna3, 3L));
-                    direccionService.save(new Direccion(null, "Paicaví 404", "Edificio rojo", 4100000, comuna4, 4L));
-                    direccionService.save(new Direccion(null, "Prat 505", null, 4780000, comuna5, 5L));
-                    System.out.println("Datos iniciales cargados correctamente (usuarios validados).");
-                } catch (Exception ex) {
-                    System.err.println(" Error al insertar direcciones: " + ex.getMessage());
-                }
+                // Crear direcciones para IDs de usuario conocidos (preconfigurados)
+                direccionService.crearDireccionSiUsuarioExiste("Av. Libertador 101", "Cerca del centro", 8320000, comuna1, 1L);
+                direccionService.crearDireccionSiUsuarioExiste("Calle Condell 202", null, 7500000, comuna2, 2L);
+                direccionService.crearDireccionSiUsuarioExiste("Av. Perú 303", "Frente al mar", 2520000, comuna3, 3L);
+                direccionService.crearDireccionSiUsuarioExiste("Paicaví 404", "Edificio rojo", 4100000, comuna4, 4L);
+                direccionService.crearDireccionSiUsuarioExiste("Prat 505", null, 4780000, comuna5, 5L);
+
+                System.out.println("Datos iniciales cargados correctamente.");
             } else {
-                System.out.println("Datos ya existen. No se cargaron nuevos datos.");
+                System.out.println("Los datos ya existen. No se cargaron nuevos registros.");
             }
         };
     }

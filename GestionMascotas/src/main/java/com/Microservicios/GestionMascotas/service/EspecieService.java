@@ -32,6 +32,14 @@ public class EspecieService {
     public Optional<Especie> buscarPorId(Long id) {
         return especieRepository.findById(id);
     }
+    
+    public Especie actualizar(Long id, Especie especie) {
+    Especie existente = especieRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Especie no encontrada"));
+    existente.setNombre(especie.getNombre());
+    return especieRepository.save(existente);
+}
+
 
     public Especie guardar(Especie especie) {
         return especieRepository.save(especie);

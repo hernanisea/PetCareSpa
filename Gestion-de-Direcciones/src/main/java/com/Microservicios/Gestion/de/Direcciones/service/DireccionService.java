@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.Microservicios.Gestion.de.Direcciones.model.Comuna;
 import com.Microservicios.Gestion.de.Direcciones.model.Direccion;
 import com.Microservicios.Gestion.de.Direcciones.repository.DireccionRepository;
 import com.Microservicios.Gestion.de.Direcciones.webclient.UsuarioClient;
@@ -35,20 +36,31 @@ public class DireccionService {
         return direccionRepository.findByUsuarioId(usuarioId);
     }
 
-   public Direccion save(Direccion direccion) {
-    try {
-        // Verifica con el microservicio si el usuario existe
-        usuarioClient.getUsuarioById(direccion.getUsuarioId());
-    } catch (RuntimeException ex) {
-        // Manejo del error si el usuario no existe
-        throw new IllegalArgumentException("No se puede guardar la dirección: el usuario con ID " 
-                                           + direccion.getUsuarioId() + " no existe.");
+    public Direccion save(Direccion direccion) {
+        validarUsuarioExistente(direccion.getUsuarioId());
+        return direccionRepository.save(direccion);
     }
-
-    return direccionRepository.save(direccion);
-}
 
     public void delete(Long id) {
         direccionRepository.deleteById(id);
+    }
+
+    public void crearDireccionSiUsuarioExiste(String calle, String descripcion, int codigoPostal, Comuna comuna, Long usuarioId) {
+        try {
+            validarUsuarioExistente(usuarioId);
+            Direccion direccion = new Direccion(null, calle, descripcion, codigoPostal, comuna, usuarioId);
+            direccionRepository.save(direccion);
+        } catch (RuntimeException ex) {
+            System.err.println("No se creó la dirección para usuario ID " + usuarioId + ": " + ex.getMessage());
+        }
+    }
+
+    private void validarUsuarioExistente(Long usuarioId) {
+        try {
+            usuarioClient.getUsuarioById(usuarioId);
+        } catch (RuntimeException ex) {
+            throw new IllegalArgumentException("No se puede guardar la dirección: el usuario con ID "
+                    + usuarioId + " no existe.");
+        }
     }
 }

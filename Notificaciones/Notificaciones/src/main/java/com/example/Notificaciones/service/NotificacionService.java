@@ -1,19 +1,21 @@
 package com.example.Notificaciones.service;
 
-import com.example.Notificaciones.client.UsuarioClient;
-import com.example.Notificaciones.dto.NotificacionConUsuarioResponse;
-import com.example.Notificaciones.dto.NotificacionRequest;
-import com.example.Notificaciones.model.Notificacion;
-import com.example.Notificaciones.repository.NotificacionRepository;
-import jakarta.transaction.Transactional;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.example.Notificaciones.client.UsuarioClient;
+import com.example.Notificaciones.dto.NotificacionConUsuarioResponse;
+import com.example.Notificaciones.dto.NotificacionRequest;
+import com.example.Notificaciones.model.Notificacion;
+import com.example.Notificaciones.repository.NotificacionRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -26,6 +28,8 @@ public class NotificacionService {
     private UsuarioClient usuarioClient;
 
     public Notificacion crearDesdeDTO(NotificacionRequest request, String correoCreador) {
+        validarUsuarioExistente(request.getUsuarioId());
+
         Notificacion noti = new Notificacion();
         noti.setUsuarioId(request.getUsuarioId());
         noti.setMensaje(request.getMensaje());
@@ -44,6 +48,7 @@ public class NotificacionService {
     }
 
     public List<NotificacionConUsuarioResponse> obtenerPorUsuarioConDatos(Long usuarioId) {
+        validarUsuarioExistente(usuarioId);
         List<Notificacion> notificaciones = notificacionRepository.findByUsuarioId(usuarioId);
         return notificaciones.stream().map(noti -> {
             Map<String, Object> usuario = usuarioClient.obtenerUsuarioPorId(noti.getUsuarioId());
@@ -63,5 +68,14 @@ public class NotificacionService {
                 })
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Notificación no encontrada con ID: " + id));
+    }
+
+    private void validarUsuarioExistente(Long usuarioId) {
+        try {
+            usuarioClient.obtenerUsuarioPorId(usuarioId);
+        } catch (RuntimeException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "No se puede crear notificación: usuario con ID " + usuarioId + " no existe.");
+        }
     }
 }

@@ -2,7 +2,9 @@ package com.Microservicios.GestionInventario.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,12 +52,12 @@ public class InventarioController {
     }
 
     @PutMapping("/productos/{id}")
-    public ResponseEntity<Producto> actualizarProducto(@PathVariable("id")  Long idProducto, @RequestBody Producto producto) {
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable("id") Long idProducto, @RequestBody Producto producto) {
         return ResponseEntity.ok(productoService.actualizar(idProducto, producto));
     }
 
     @DeleteMapping("/productos/{id}")
-    public ResponseEntity<Void> eliminarProducto(@PathVariable("id")  Long idProducto) {
+    public ResponseEntity<Void> eliminarProducto(@PathVariable("id") Long idProducto) {
         productoService.eliminar(idProducto);
         return ResponseEntity.noContent().build();
     }
@@ -69,18 +71,23 @@ public class InventarioController {
     }
 
     @GetMapping("/tratamientos/{id}")
-    public ResponseEntity<Tratamiento> obtenerTratamiento(@PathVariable("id")  Long idProducto) {
+    public ResponseEntity<Tratamiento> obtenerTratamiento(@PathVariable("id") Long idProducto) {
         return ResponseEntity.ok(tratamientoService.obtenerPorId(idProducto));
     }
 
+    @GetMapping("/productos/stock-bajo")
+    public List<Producto> obtenerProductosConStockBajo() {
+        return productoService.obtenerStockBajo();
+    }
+
     @PostMapping("/tratamientos")
-    public ResponseEntity<Tratamiento> crearTratamiento(@RequestBody TratamientoRequest request) {
-        Tratamiento nuevo = new Tratamiento(null, request.getCantidad(), request.getSubtotal(), null);
-        return ResponseEntity.ok(tratamientoService.guardar(nuevo, request.getIdProducto()));
+    public ResponseEntity<Tratamiento> crearTratamiento(@RequestBody @Validated Tratamiento tratamiento) {
+        Tratamiento nuevo = tratamientoService.crearTratamiento(tratamiento);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
     @DeleteMapping("/tratamientos/{id}")
-    public ResponseEntity<Void> eliminarTratamiento(@PathVariable("id")  Long idProducto) {
+    public ResponseEntity<Void> eliminarTratamiento(@PathVariable("id") Long idProducto) {
         tratamientoService.eliminar(idProducto);
         return ResponseEntity.noContent().build();
     }

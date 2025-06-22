@@ -12,5 +12,6 @@ public interface MascotaRepository extends JpaRepository<Mascotas, Long> {
     List<Mascotas> findByEspecieIdEspecie(Long idEspecie);
     List<Mascotas> findByRazaIdRaza(Long idRaza);
     List<Mascotas> findByIdUsuario(Long idUsuario);
+    
 }
 
