@@ -111,7 +111,6 @@ public class UsuarioService {
         usuario.setIdDireccion(0L);
         usuario.setIdMascota(0L);
         usuario.setIdNotificacion(0L);
-        usuario.setIdReportes(0L);
         usuario.setIdHistorial(0L);
 
         return usuario;
