@@ -12,6 +12,10 @@ import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
 import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
+import com.Microservicios.GestionUsuarios.service.UsuarioService;
+
+import java.util.Map;
+
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -30,6 +34,10 @@ public class UsuarioController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+private UsuarioService usuarioService;
+
 
     @GetMapping("/roles")
     public ResponseEntity<List<Rol>> getRoles() {
@@ -51,6 +59,13 @@ public class UsuarioController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
         return ResponseEntity.ok(usuario);
     }
+
+    @GetMapping("/{id}/con-direccion")
+public ResponseEntity<Map<String, Object>> obtenerUsuarioConDireccion(@PathVariable Long id) {
+    Map<String, Object> usuarioConDireccion = usuarioService.obtenerUsuarioConDireccion(id);
+    return ResponseEntity.ok(usuarioConDireccion);
+}
+
 
     @PostMapping
     @Transactional

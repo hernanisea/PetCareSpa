@@ -1,21 +1,20 @@
 package com.Microservicios.GestionUsuarios.config;
 
 import com.Microservicios.GestionUsuarios.model.Rol;
+import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
 import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
 import com.Microservicios.GestionUsuarios.service.UsuarioService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class LoadDatabase {
 
     @Bean
-    CommandLineRunner initDatabase(RolRepository rolRepo, UsuarioRepository usuarioRepo, PasswordEncoder passwordEncoder, UsuarioService usuarioService) {
+    CommandLineRunner initDatabase(RolRepository rolRepo, UsuarioRepository usuarioRepo, UsuarioService usuarioService) {
         return args -> {
-
             if (rolRepo.count() == 0 && usuarioRepo.count() == 0) {
                 Rol adminSistema = rolRepo.save(new Rol("Administrador del Sistema"));
                 Rol coordinadorClinica = rolRepo.save(new Rol("Coordinador de Clínica"));
@@ -33,4 +32,4 @@ public class LoadDatabase {
             }
         };
     }
-} 
+}
