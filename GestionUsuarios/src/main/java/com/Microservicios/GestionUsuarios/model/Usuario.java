@@ -28,7 +28,7 @@ public class Usuario {
 
     private String telefono;
 
-    // ⚠️ Campos opcionales marcados como nullable = true
+
     @Column(name = "id_direccion", nullable = true)
     private Long idDireccion;
 

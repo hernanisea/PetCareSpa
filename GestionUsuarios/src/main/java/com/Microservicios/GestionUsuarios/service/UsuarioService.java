@@ -2,6 +2,7 @@ package com.Microservicios.GestionUsuarios.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Microservicios.GestionUsuarios.model.Rol;
@@ -17,10 +18,12 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Usuario> obtenerUsuarios() {
@@ -42,7 +45,7 @@ public class UsuarioService {
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
         usuario.setCorreo(correo);
-        usuario.setClave(clave);
+        usuario.setClave(passwordEncoder.encode(clave));
         usuario.setEstado(estado);
         usuario.setTelefono(telefono);
         usuario.setIdDireccion(idDireccion);
@@ -73,15 +76,14 @@ public class UsuarioService {
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
         usuario.setCorreo(correo);
-        usuario.setClave(clave);
+        usuario.setClave(passwordEncoder.encode(clave));
         usuario.setEstado(estado);
         usuario.setTelefono(telefono);
         usuario.setIdDireccion(idDireccion);
         usuario.setIdMascota(idMascota);
         usuario.setIdComentario(idComentario);
         usuario.setIdNotificacion(idNotifacion);
-
-        usuario.setIdHistorial(idHistorial);                                
+        usuario.setIdHistorial(idHistorial);
         usuario.setRol(rol);
 
         return usuarioRepository.save(usuario);
@@ -93,5 +95,25 @@ public class UsuarioService {
             throw new RuntimeException("No existe un usuario con ID: " + idUsuario);
         }
         usuarioRepository.deleteById(idUsuario);
+    }
+
+    public Usuario crearUsuarioBasico(String nombre, String apellido, String correo, String clave, String telefono, Rol rol) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(nombre);
+        usuario.setApellido(apellido);
+        usuario.setCorreo(correo);
+        usuario.setClave(passwordEncoder.encode(clave));
+        usuario.setTelefono(telefono);
+        usuario.setEstado(true);
+        usuario.setRol(rol);
+
+        usuario.setIdComentario(0L);
+        usuario.setIdDireccion(0L);
+        usuario.setIdMascota(0L);
+        usuario.setIdNotificacion(0L);
+        usuario.setIdReportes(0L);
+        usuario.setIdHistorial(0L);
+
+        return usuario;
     }
 }

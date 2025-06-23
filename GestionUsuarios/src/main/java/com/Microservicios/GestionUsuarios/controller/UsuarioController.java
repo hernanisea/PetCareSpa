@@ -15,7 +15,6 @@ import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
@@ -116,74 +115,6 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    // DTO para entrada de datos
-    public static class UsuarioRequest {
-
-        @NotBlank
-        private String nombre;
-
-        @NotBlank
-        private String apellido;
-
-        @Email
-        @NotBlank
-        private String correo;
-
-        @Size(min = 6)
-        private String clave;
-
-        @NotNull
-        private Boolean estado;
-
-        @Pattern(regexp = "^[0-9]+$")
-        private String telefono;
-
-        private Long idDireccion;
-        private Long idMascota;
-        private Long idComentario;
-        private Long idNotificacion;
-        private Long idReportes;
-        private Long idHistorial;
-        private Long id;
-
-        // Getters y Setters
-        public String getNombre() { return nombre; }
-        public void setNombre(String nombre) { this.nombre = nombre; }
-
-        public String getApellido() { return apellido; }
-        public void setApellido(String apellido) { this.apellido = apellido; }
-
-        public String getCorreo() { return correo; }
-        public void setCorreo(String correo) { this.correo = correo; }
-
-        public String getClave() { return clave; }
-        public void setClave(String clave) { this.clave = clave; }
-
-        public Boolean getEstado() { return estado; }
-        public void setEstado(Boolean estado) { this.estado = estado; }
-
-        public String getTelefono() { return telefono; }
-        public void setTelefono(String telefono) { this.telefono = telefono; }
-
-        public Long getIdDireccion() { return idDireccion; }
-        public void setIdDireccion(Long idDireccion) { this.idDireccion = idDireccion; }
-
-        public Long getIdMascota() { return idMascota; }
-        public void setIdMascota(Long idMascota) { this.idMascota = idMascota; }
-
-        public Long getIdComentario() { return idComentario; }
-        public void setIdComentario(Long idComentario) { this.idComentario = idComentario; }
-
-        public Long getIdNotificacion() { return idNotificacion; }
-        public void setIdNotificacion(Long idNotificacion) { this.idNotificacion = idNotificacion; }
-
-        public Long getIdReportes() { return idReportes; }
-        public void setIdReportes(Long idReportes) { this.idReportes = idReportes; }
-
-        public Long getIdHistorial() { return idHistorial; }
-        public void setIdHistorial(Long idHistorial) { this.idHistorial = idHistorial; }
-
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
+  
     }
-}
+
