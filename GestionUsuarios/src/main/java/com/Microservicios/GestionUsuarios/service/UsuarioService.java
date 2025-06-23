@@ -122,7 +122,7 @@ public class UsuarioService {
         usuarioRepository.deleteById(idUsuario);
     }
 
-    // Método auxiliar para LoadDatabase
+    
     public Usuario crearUsuarioBasico(String nombre, String apellido, String correo, String clave, String telefono, Rol rol) {
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);

@@ -1,11 +1,21 @@
 package com.Microservicios.GestionUsuarios.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.Microservicios.GestionUsuarios.model.Rol;
@@ -14,12 +24,8 @@ import com.Microservicios.GestionUsuarios.repository.RolRepository;
 import com.Microservicios.GestionUsuarios.repository.UsuarioRepository;
 import com.Microservicios.GestionUsuarios.service.UsuarioService;
 
-import java.util.Map;
-
-
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -61,10 +67,10 @@ private UsuarioService usuarioService;
     }
 
     @GetMapping("/{id}/con-direccion")
-public ResponseEntity<Map<String, Object>> obtenerUsuarioConDireccion(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> obtenerUsuarioConDireccion(@PathVariable Long id) {
     Map<String, Object> usuarioConDireccion = usuarioService.obtenerUsuarioConDireccion(id);
     return ResponseEntity.ok(usuarioConDireccion);
-}
+    }
 
 
     @PostMapping
