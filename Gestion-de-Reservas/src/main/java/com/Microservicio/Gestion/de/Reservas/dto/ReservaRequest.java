@@ -2,11 +2,15 @@ package com.Microservicio.Gestion.de.Reservas.dto;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReservaRequest {
 
     @NotNull(message = "La fecha de la reserva no puede ser nula")

@@ -61,7 +61,6 @@ public class TratamientoService {
     }
 
     public Tratamiento crearTratamientoConDto(Tratamiento tratamiento, Long idProducto) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'crearTratamientoConDto'");
     }
 }
