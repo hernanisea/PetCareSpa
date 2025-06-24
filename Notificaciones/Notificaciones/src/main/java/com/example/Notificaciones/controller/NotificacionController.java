@@ -21,11 +21,9 @@ import java.util.List;
 @Validated
 public class NotificacionController {
 
-    @Autowired
-    private NotificacionService notificacionService;
+    @Autowired NotificacionService notificacionService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    @Autowired JwtUtil jwtUtil;
 
     @GetMapping
     public ResponseEntity<List<Notificacion>> obtenerTodas() {

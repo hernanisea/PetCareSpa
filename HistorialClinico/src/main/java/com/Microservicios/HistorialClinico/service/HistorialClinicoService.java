@@ -1,6 +1,7 @@
 package com.Microservicios.HistorialClinico.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class HistorialClinicoService {
     }
 
     public HistorialClinico guardarHistorial(HistorialClinicoRequest request) {
-        validarUsuarioYMasco(request.getUsuarioId(), request.getMascotaId());
+        validarUsuarioYMascota(request.getUsuarioId(), request.getMascotaId());
         HistorialClinico historial = new HistorialClinico();
         historial.setFecha(request.getFecha());
         historial.setDiagnostico(request.getDiagnostico());
@@ -46,7 +47,7 @@ public class HistorialClinicoService {
         HistorialClinico actual = historialClinicoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Historial no encontrado"));
 
-        validarUsuarioYMasco(request.getUsuarioId(), request.getMascotaId());
+        validarUsuarioYMascota(request.getUsuarioId(), request.getMascotaId());
 
         actual.setFecha(request.getFecha());
         actual.setDiagnostico(request.getDiagnostico());
@@ -60,12 +61,16 @@ public class HistorialClinicoService {
         historialClinicoRepository.deleteById(id);
     }
 
-    private void validarUsuarioYMasco(Long usuarioId, Long mascotaId) {
-        if (usuarioClient.getUsuarioById(usuarioId).isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado");
-        }
-        if (mascotaClient.getMascotaById(mascotaId).isEmpty()) {
-            throw new RuntimeException("Mascota no encontrada");
-        }
+private void validarUsuarioYMascota(Long usuarioId, Long mascotaId) {
+    Map<String, Object> usuario = usuarioClient.getUsuarioById(usuarioId);
+    if (usuario == null || usuario.isEmpty()) {
+        throw new RuntimeException("Usuario no encontrado");
+    }
+
+    Map<String, Object> mascota = mascotaClient.getMascotaById(mascotaId);
+    if (mascota == null || mascota.isEmpty()) {
+        throw new RuntimeException("Mascota no encontrada");
     }
 }
+}
+

@@ -21,11 +21,9 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class NotificacionService {
 
-    @Autowired
-    private NotificacionRepository notificacionRepository;
+    @Autowired NotificacionRepository notificacionRepository;
 
-    @Autowired
-    private UsuarioClient usuarioClient;
+    @Autowired UsuarioClient usuarioClient;
 
     public Notificacion crearDesdeDTO(NotificacionRequest request, String correoCreador) {
         validarUsuarioExistente(request.getUsuarioId());

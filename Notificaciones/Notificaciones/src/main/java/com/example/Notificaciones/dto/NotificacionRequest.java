@@ -3,6 +3,13 @@ package com.example.Notificaciones.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor // Asegúrate de que esta anotación esté presente
+@NoArgsConstructor
 
 public class NotificacionRequest {
 
