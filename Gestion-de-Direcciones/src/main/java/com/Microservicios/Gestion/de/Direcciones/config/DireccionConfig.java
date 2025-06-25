@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.Microservicios.Gestion.de.Direcciones.model.Comuna;
-import com.Microservicios.Gestion.de.Direcciones.model.Direccion;
 import com.Microservicios.Gestion.de.Direcciones.model.Region;
 import com.Microservicios.Gestion.de.Direcciones.repository.ComunaRepository;
 import com.Microservicios.Gestion.de.Direcciones.repository.RegionRepository;
