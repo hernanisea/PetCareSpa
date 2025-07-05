@@ -16,5 +16,5 @@ public class RolConUsuariosResponse {
     private String nombre;
 
     @Schema(description = "Lista de usuarios que tienen este rol")
-    private List<UsuarioResponse> usuarios;
+    private List<UsuarioResponseRol> usuarios;
 }

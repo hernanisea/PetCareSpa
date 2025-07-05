@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.Microservicios.GestionUsuarios.dto.RolConUsuariosResponse;
 import com.Microservicios.GestionUsuarios.dto.UsuarioResponse;
+import com.Microservicios.GestionUsuarios.dto.UsuarioResponseRol;
 import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
@@ -134,17 +135,29 @@ public class UsuarioService {
     return dto;
     }
 
+    public UsuarioResponseRol convertirUsuarioResponseRol(Usuario usuario) {
+    UsuarioResponseRol dto1 = new UsuarioResponseRol();
+    dto1.setId(usuario.getIdUsuario());
+    dto1.setNombre(usuario.getNombre());
+    dto1.setApellido(usuario.getApellido());
+    dto1.setCorreo(usuario.getCorreo());
+    dto1.setTelefono(usuario.getTelefono());
+    dto1.setEstado(usuario.getEstado());
+    return dto1;
+    }
+
+
     public RolConUsuariosResponse convertirRolConUsuarios(Rol rol) {
-    RolConUsuariosResponse dto = new RolConUsuariosResponse();
-    dto.setId(rol.getId());
-    dto.setNombre(rol.getNombre());
+    RolConUsuariosResponse dto1 = new RolConUsuariosResponse();
+    dto1.setId(rol.getId());
+    dto1.setNombre(rol.getNombre());
     
-    List<UsuarioResponse> usuarios = rol.getUsuarios().stream()
-            .map(this::convertirUsuarioResponse)
+    List<UsuarioResponseRol> usuarios = rol.getUsuarios().stream()
+            .map(this::convertirUsuarioResponseRol)
             .toList();
 
-    dto.setUsuarios(usuarios);
-    return dto;
+    dto1.setUsuarios(usuarios);
+    return dto1;
     }
 
 }
