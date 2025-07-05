@@ -1,16 +1,19 @@
 package com.Microservicios.GestionUsuarios.security;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
-
 import java.security.Key;
 import java.util.Date;
+
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
 
-    // ⚠️ Clave secreta de mínimo 32 caracteres para HMAC-SHA
+    // Clave secreta de mínimo 32 caracteres para HMAC-SHA
     private final String SECRET_KEY = "clave-super-segura-para-jwt-2025-clinicavetsystem";
 
     // Token válido por 10 horas (en milisegundos)

@@ -35,5 +35,18 @@ public class ComentarioRepositoryTest {
         assertThat(resultado).isNotEmpty();
         assertThat(resultado.get(0).getContenido()).isEqualTo("Test contenido");
     }
+
+    @Test
+    void eliminarComentarioPorId(){
+
+        Comentario comentario = new Comentario(null, "Comentario a eliminar", "2025-06-24", true, 1L, 1L);
+        Comentario guardado = comentarioRepository.save(comentario);
+
+        comentarioRepository.deleteById(guardado.getIdComentario());
+
+        boolean existe = comentarioRepository.findById(guardado.getIdComentario()).isPresent();
+        assertThat(existe).isFalse();
+
+    }
 }
 

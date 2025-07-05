@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.Microservicios.GestionUsuarios.dto.RolConUsuariosResponse;
+import com.Microservicios.GestionUsuarios.dto.UsuarioResponse;
 import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
@@ -57,9 +59,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario crearUsuario(String nombre, String apellido, String correo, String clave,
-                                Boolean estado, String telefono, Long idDireccion, Long idMascota,
-                                Long idComentario, Long idNotifacion, Long idReportes, Long idHistorial, Long id) {
+    public Usuario crearUsuario(String nombre, String apellido, String correo, String clave, boolean estado, String telefono, long id) {
 
         if (usuarioRepository.existsByCorreo(correo)) {
             throw new RuntimeException("Ya existe un usuario con el correo: " + correo);
@@ -75,12 +75,6 @@ public class UsuarioService {
         usuario.setClave(passwordEncoder.encode(clave));
         usuario.setEstado(estado);
         usuario.setTelefono(telefono);
-        usuario.setIdDireccion(idDireccion);
-        usuario.setIdMascota(idMascota);
-        usuario.setIdComentario(idComentario);
-        usuario.setIdNotificacion(idNotifacion);
-        usuario.setIdReportes(idReportes);
-        usuario.setIdHistorial(idHistorial);
         usuario.setRol(rol);
 
         return usuarioRepository.save(usuario);
@@ -88,8 +82,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario actualizarUsuario(Long idUsuario, String nombre, String apellido, String correo, String clave,
-                                     Boolean estado, String telefono, Long idDireccion, Long idMascota,
-                                     Long idComentario, Long idNotifacion, Long idReportes, Long idHistorial, Long id) {
+                                     Boolean estado, String telefono, Long id) {
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + idUsuario));
@@ -103,12 +96,6 @@ public class UsuarioService {
         usuario.setClave(passwordEncoder.encode(clave));
         usuario.setEstado(estado);
         usuario.setTelefono(telefono);
-        usuario.setIdDireccion(idDireccion);
-        usuario.setIdMascota(idMascota);
-        usuario.setIdComentario(idComentario);
-        usuario.setIdNotificacion(idNotifacion);
-        usuario.setIdReportes(idReportes);
-        usuario.setIdHistorial(idHistorial);
         usuario.setRol(rol);
 
         return usuarioRepository.save(usuario);
@@ -123,7 +110,7 @@ public class UsuarioService {
     }
 
     
-    public Usuario crearUsuarioBasico(String nombre, String apellido, String correo, String clave, String telefono, Rol rol) {
+    public Usuario crearUsuarioBasico(String nombre, String apellido, String correo, String clave, String telefono, Rol coordinadorClinica) {
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
@@ -131,14 +118,33 @@ public class UsuarioService {
         usuario.setClave(passwordEncoder.encode(clave));
         usuario.setEstado(true);
         usuario.setTelefono(telefono);
-        usuario.setIdDireccion(0L);
-        usuario.setIdMascota(0L);
-        usuario.setIdComentario(0L);
-        usuario.setIdNotificacion(0L);
-        usuario.setIdReportes(0L);
-        usuario.setIdHistorial(0L);
-        usuario.setRol(rol);
+        usuario.setRol(coordinadorClinica);
 
         return usuarioRepository.save(usuario);
     }
+    public UsuarioResponse convertirUsuarioResponse(Usuario usuario) {
+    UsuarioResponse dto = new UsuarioResponse();
+    dto.setId(usuario.getIdUsuario());
+    dto.setNombre(usuario.getNombre());
+    dto.setApellido(usuario.getApellido());
+    dto.setCorreo(usuario.getCorreo());
+    dto.setTelefono(usuario.getTelefono());
+    dto.setEstado(usuario.getEstado());
+    dto.setRol(usuario.getRol().getNombre());
+    return dto;
+    }
+
+    public RolConUsuariosResponse convertirRolConUsuarios(Rol rol) {
+    RolConUsuariosResponse dto = new RolConUsuariosResponse();
+    dto.setId(rol.getId());
+    dto.setNombre(rol.getNombre());
+    
+    List<UsuarioResponse> usuarios = rol.getUsuarios().stream()
+            .map(this::convertirUsuarioResponse)
+            .toList();
+
+    dto.setUsuarios(usuarios);
+    return dto;
+    }
+
 }

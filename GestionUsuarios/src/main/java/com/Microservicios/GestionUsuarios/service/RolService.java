@@ -1,12 +1,14 @@
 package com.Microservicios.GestionUsuarios.service;
 
-import com.Microservicios.GestionUsuarios.model.Rol;
-import com.Microservicios.GestionUsuarios.repository.RolRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.Microservicios.GestionUsuarios.model.Rol;
+import com.Microservicios.GestionUsuarios.repository.RolRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -17,6 +19,11 @@ public class RolService {
     public RolService(RolRepository rolRepository) {
         this.rolRepository = rolRepository;
     }
+    public Rol save(String nombre) {
+    Rol rol = new Rol(); 
+    rol.setNombre(nombre);
+    return rol;
+}
 
     public List<Rol> obtenerTodos() {
         return rolRepository.findAll();

@@ -2,6 +2,7 @@ package com.Microservicios.GestionUsuarios.model;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,12 +20,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(name = "Rol", description = "Entidad que representa un rol del sistema")
 public class Rol {
-
-        public Rol(String nombre) {
-        this.nombre = nombre;
-    }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +33,6 @@ public class Rol {
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonManagedReference
+    @Schema(hidden = true)
     private List<Usuario> usuarios;
-
 }

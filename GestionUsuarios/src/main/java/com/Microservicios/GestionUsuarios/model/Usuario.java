@@ -1,5 +1,6 @@
 package com.Microservicios.GestionUsuarios.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,49 +22,52 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(name = "UsuarioEntity", description = "Entidad JPA que representa a un usuario del sistema")
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador único del usuario", example = "1")
     private Long idUsuario;
 
+    @Schema(description = "Nombre del usuario", example = "Juan")
     private String nombre;
+
+    @Schema(description = "Apellido del usuario", example = "Pérez")
     private String apellido;
 
     @Column(unique = true, nullable = false)
+    @Schema(description = "Correo electrónico del usuario", example = "juan.perez@demo.com")
     private String correo;
 
     @Column(nullable = false)
+    @Schema(hidden = true) 
     private String clave;
 
+    @Schema(description = "Estado del usuario", example = "true")
     private Boolean estado;
 
+    @Schema(description = "Número de teléfono", example = "987654321")
     private String telefono;
 
-
-    @Column(name = "id_direccion", nullable = true)
+    @Schema(hidden = true)
     private Long idDireccion;
 
-    @Column(name = "id_mascota", nullable = true)
+    @Schema(hidden = true)
     private Long idMascota;
 
-    @Column(name = "id_comentario", nullable = true)
+    @Schema(hidden = true)
     private Long idComentario;
 
-    @Column(name = "id_notificacion", nullable = true)
+    @Schema(hidden = true)
     private Long idNotificacion;
 
-    @Column(name = "id_reportes", nullable = true)
-    private Long idReportes;
-
-    @Column(name = "id_historial", nullable = true)
+    @Schema(hidden = true)
     private Long idHistorial;
 
-
-    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rol", nullable = false, foreignKey = @ForeignKey(name = "FK_usuario_rol"))
     @com.fasterxml.jackson.annotation.JsonBackReference
+    @Schema(description = "Rol asignado al usuario")
     private Rol rol;
-
 }

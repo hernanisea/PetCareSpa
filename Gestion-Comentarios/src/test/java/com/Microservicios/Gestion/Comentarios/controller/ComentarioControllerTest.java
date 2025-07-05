@@ -1,5 +1,6 @@
 package com.Microservicios.Gestion.Comentarios.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -58,5 +59,17 @@ public class ComentarioControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.contenido").value("Test nuevo"))
                 .andExpect(jsonPath("$.estado").value(true));
+    }
+
+    @Test
+    void eliminarComentario_test() throws Exception {
+        Long comentarioId= 1L;
+
+        doNothing().when(comentarioService).eliminarComentario(comentarioId);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/comentarios/{id}", comentarioId))
+        .andExpect(status().isNoContent());
+
+        verify(comentarioService, times(1)).eliminarComentario(comentarioId);
     }
 }

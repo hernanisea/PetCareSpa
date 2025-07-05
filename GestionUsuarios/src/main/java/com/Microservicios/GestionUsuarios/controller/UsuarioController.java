@@ -1,7 +1,6 @@
 package com.Microservicios.GestionUsuarios.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.Microservicios.GestionUsuarios.dto.RolConUsuariosResponse;
+import com.Microservicios.GestionUsuarios.dto.UsuarioResponse;
 import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
 import com.Microservicios.GestionUsuarios.repository.RolRepository;
@@ -51,56 +52,57 @@ public class UsuarioController {
 
     @Operation(summary = "Obtener todos los roles disponibles")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de roles encontrada", 
-            content = @Content(schema = @Schema(implementation = Rol.class))),
+        @ApiResponse(responseCode = "200", description = "Lista de roles encontrada",
+                content = @Content(schema = @Schema(implementation = RolConUsuariosResponse.class))),
         @ApiResponse(responseCode = "204", description = "No se encontraron roles")
     })
     @GetMapping("/roles")
-    public ResponseEntity<List<Rol>> getRoles() {
+    public ResponseEntity<List<RolConUsuariosResponse>> getRolesConUsuarios() {
         List<Rol> roles = rolRepository.findAll();
         if (roles.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(roles);
+
+        List<RolConUsuariosResponse> response = roles.stream()
+                .map(usuarioService::convertirRolConUsuarios)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Listar todos los usuarios")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de usuarios encontrada", 
-            content = @Content(schema = @Schema(implementation = Usuario.class)))
+        @ApiResponse(responseCode = "200", description = "Lista de usuarios encontrada",
+                content = @Content(schema = @Schema(implementation = UsuarioResponse.class)))
     })
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
-        return ResponseEntity.ok(usuarioRepository.findAll());
+    public ResponseEntity<List<UsuarioResponse>> listarUsuarios() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<UsuarioResponse> response = usuarios.stream()
+                .map(usuarioService::convertirUsuarioResponse)
+                .toList();
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Obtener un usuario por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario encontrado", 
-            content = @Content(schema = @Schema(implementation = Usuario.class))),
+        @ApiResponse(responseCode = "200", description = "Usuario encontrado",
+                content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
         @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponse> obtenerUsuario(@PathVariable Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
-        return ResponseEntity.ok(usuario);
-    }
 
-    @Operation(summary = "Obtener un usuario con su información de dirección")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario con dirección encontrado")
-    })
-    @GetMapping("/{id}/con-direccion")
-    public ResponseEntity<Map<String, Object>> obtenerUsuarioConDireccion(@PathVariable Long id) {
-        Map<String, Object> usuarioConDireccion = usuarioService.obtenerUsuarioConDireccion(id);
-        return ResponseEntity.ok(usuarioConDireccion);
+        UsuarioResponse dto = usuarioService.convertirUsuarioResponse(usuario);
+        return ResponseEntity.ok(dto);
     }
 
     @Operation(summary = "Crear un nuevo usuario")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente", 
-            content = @Content(schema = @Schema(implementation = Usuario.class))),
+        @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente",
+                content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
         @ApiResponse(responseCode = "409", description = "El correo ya está registrado"),
         @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
@@ -122,11 +124,6 @@ public class UsuarioController {
         usuario.setClave(passwordEncoder.encode(request.getClave()));
         usuario.setEstado(request.getEstado());
         usuario.setTelefono(request.getTelefono());
-        usuario.setIdDireccion(request.getIdDireccion());
-        usuario.setIdMascota(request.getIdMascota());
-        usuario.setIdComentario(request.getIdComentario());
-        usuario.setIdNotificacion(request.getIdNotificacion());
-        usuario.setIdHistorial(request.getIdHistorial());
         usuario.setRol(rol);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
@@ -134,8 +131,8 @@ public class UsuarioController {
 
     @Operation(summary = "Actualizar un usuario existente")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", 
-            content = @Content(schema = @Schema(implementation = Usuario.class))),
+        @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente",
+                content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
         @ApiResponse(responseCode = "404", description = "Usuario o rol no encontrado")
     })
     @PutMapping("/{id}")
@@ -153,11 +150,6 @@ public class UsuarioController {
         usuario.setClave(passwordEncoder.encode(request.getClave()));
         usuario.setEstado(request.getEstado());
         usuario.setTelefono(request.getTelefono());
-        usuario.setIdDireccion(request.getIdDireccion());
-        usuario.setIdMascota(request.getIdMascota());
-        usuario.setIdComentario(request.getIdComentario());
-        usuario.setIdNotificacion(request.getIdNotificacion());
-        usuario.setIdHistorial(request.getIdHistorial());
         usuario.setRol(rol);
 
         return ResponseEntity.ok(usuarioRepository.save(usuario));

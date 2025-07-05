@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.Microservicios.Gestion.Comentarios.dto.ComentarioRequest;
@@ -54,5 +56,14 @@ public class ComentarioServiceTest {
         List<Comentario> comentarios = comentarioService.obtenerPorUsuario(1L);
         assertThat(comentarios).hasSize(1);
         assertThat(comentarios.get(0).getIdUsuario()).isEqualTo(1L);
+    }
+
+    @Test
+    void eliminarComentario_test(){
+        Long comentarioId = 1L;
+
+        comentarioService.eliminarComentario(comentarioId);
+
+        verify(comentarioRepository, times(1)).deleteById(comentarioId);
     }
 }
