@@ -45,7 +45,7 @@ public class ComentarioServiceTest {
         Comentario resultado = comentarioService.crearComentario(request);
 
         assertThat(resultado.getContenido()).isEqualTo("Contenido test");
-        assertThat(resultado.getEstado()).isTrue();
+        assertThat(resultado.isEstado()).isTrue();
     }
 
     @Test

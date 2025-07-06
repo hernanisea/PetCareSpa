@@ -1,5 +1,6 @@
 package com.example.Notificaciones.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,18 +9,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor // Asegúrate de que esta anotación esté presente
+@AllArgsConstructor 
 @NoArgsConstructor
 
 public class NotificacionRequest {
 
-    @NotNull(message = "El ID del usuario no puede ser nulo")
+ @NotNull
+    @Schema(description = "ID del usuario que recibirá la notificación", example = "101", required = true)
     private Long usuarioId;
 
-    @NotBlank(message = "El mensaje no puede estar vacío")
-    @Size(max = 255, message = "El mensaje no puede exceder los 255 caracteres")
+    @NotBlank
+    @Size(max = 255)
+    @Schema(description = "Mensaje de la notificación", example = "Tienes una nueva consulta", required = true)
     private String mensaje;
-
+    
     public Long getUsuarioId() {
         return usuarioId;
     }

@@ -23,7 +23,8 @@ public class HistorialClinico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idHistorial;
+    @Column(name = "id_historial")
+    private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha_historial", nullable = false)

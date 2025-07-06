@@ -73,4 +73,3 @@ private void validarUsuarioYMascota(Long usuarioId, Long mascotaId) {
     }
 }
 }
-

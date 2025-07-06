@@ -52,7 +52,7 @@ public class HistorialClinicoController {
 
     @Operation(summary = "Crear un nuevo historial clínico")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Historial creado exitosamente",
+        @ApiResponse(responseCode = "201", description = "Historial creado exitosamente",
                 content = @Content(schema = @Schema(implementation = HistorialClinico.class)))
     })
     @PostMapping

@@ -1,8 +1,5 @@
 package com.Microservicios.HistorialClinico.controller;
 
-import com.Microservicios.HistorialClinico.dto.HistorialClinicoRequest;
-import com.Microservicios.HistorialClinico.model.HistorialClinico;
-import com.Microservicios.HistorialClinico.service.HistorialClinicoService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +10,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.springframework.http.MediaType;
+
+import com.example.reservas.webclient.Microservicios.HistorialClinico.controller.HistorialClinicoController;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.dto.HistorialClinicoRequest;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.model.HistorialClinico;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.service.HistorialClinicoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;

@@ -1,6 +1,6 @@
 package com.Microservicios.Gestion.Comentarios.model;
 
-import jakarta.persistence.Column;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,25 +15,26 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(name = "Comentario", description = "Entidad que representa un comentario de un usuario sobre una reserva")
 public class Comentario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_comentario")
+    @Schema(description = "ID único del comentario", example = "10")
     private Long idComentario;
 
-    @Column(name = "contenido", nullable = false, length = 500)
+    @Schema(description = "Contenido textual del comentario", example = "Muy buena atención y puntualidad.")
     private String contenido;
 
-    @Column(name = "fecha_creacion", nullable = false)
+    @Schema(description = "Fecha en que se registró el comentario", example = "2025-07-06")
     private String fechaCreacion;
 
-    @Column(name = "estado", nullable = false)
-    private Boolean estado;
+    @Schema(description = "Indica si el comentario está activo", example = "true")
+    private boolean estado;
 
-    @Column(name = "id_usuario", nullable = false)
+    @Schema(description = "ID del usuario autor del comentario", example = "5")
     private Long idUsuario;
 
-    @Column(name = "id_reserva", nullable = false)
+    @Schema(description = "ID de la reserva a la cual pertenece el comentario", example = "12")
     private Long idReserva;
 }

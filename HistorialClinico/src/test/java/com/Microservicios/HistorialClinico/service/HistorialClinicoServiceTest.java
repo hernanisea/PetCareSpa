@@ -1,16 +1,17 @@
 package com.Microservicios.HistorialClinico.service;
 
-import com.Microservicios.HistorialClinico.dto.HistorialClinicoRequest;
-import com.Microservicios.HistorialClinico.model.HistorialClinico;
-import com.Microservicios.HistorialClinico.repository.HistorialClinicoRepository;
-import com.Microservicios.HistorialClinico.webclient.MascotaClient;
-import com.Microservicios.HistorialClinico.webclient.UsuarioClient;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.example.reservas.webclient.Microservicios.HistorialClinico.dto.HistorialClinicoRequest;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.model.HistorialClinico;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.repository.HistorialClinicoRepository;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.service.HistorialClinicoService;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.webclient.MascotaClient;
+import com.example.reservas.webclient.Microservicios.HistorialClinico.webclient.UsuarioClient;
 
 import java.util.Date;
 import java.util.HashMap;

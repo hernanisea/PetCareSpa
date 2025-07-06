@@ -1,18 +1,20 @@
 package com.example.Notificaciones.service;
 
+import java.util.Date;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.example.Notificaciones.client.UsuarioClient;
 import com.example.Notificaciones.dto.NotificacionRequest;
 import com.example.Notificaciones.model.Notificacion;
 import com.example.Notificaciones.repository.NotificacionRepository;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class NotificacionServiceTest {
 
@@ -49,6 +51,6 @@ public class NotificacionServiceTest {
 
         Notificacion actualizado = service.marcarComoLeida(1L);
 
-        assertThat(actualizado.isLeido()).isTrue();
+        assertThat(actualizado.getLeido()).isTrue();
     }
 }

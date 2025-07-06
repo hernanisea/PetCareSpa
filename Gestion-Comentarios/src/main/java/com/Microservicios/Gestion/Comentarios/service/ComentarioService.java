@@ -32,7 +32,7 @@ public class ComentarioService {
     public Comentario crearComentario(ComentarioRequest request) {
         validarUsuarioExistente(request.getIdUsuario());
         Comentario nuevo = new Comentario(null, request.getContenido(), request.getFechaCreacion(),
-                                           request.getEstado(), request.getIdUsuario(), request.getIdReserva());
+                                           request.isEstado(), request.getIdUsuario(), request.getIdReserva());
         return comentarioRepository.save(nuevo);
     }
 
@@ -41,7 +41,7 @@ public class ComentarioService {
         Comentario comentario = obtenerComentarioPorId(id);
         comentario.setContenido(request.getContenido());
         comentario.setFechaCreacion(request.getFechaCreacion());
-        comentario.setEstado(request.getEstado());
+        comentario.setEstado(request.isEstado());
         comentario.setIdUsuario(request.getIdUsuario());
         comentario.setIdReserva(request.getIdReserva());
         return comentarioRepository.save(comentario);

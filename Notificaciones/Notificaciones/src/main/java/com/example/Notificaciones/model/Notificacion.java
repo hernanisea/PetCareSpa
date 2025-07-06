@@ -1,35 +1,44 @@
 package com.example.Notificaciones.model;
 
-import jakarta.persistence.*;
+import java.util.Date;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Entity
-@Table(name = "notificacion")
+@Table(name = "notificaciones")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Schema(name = "Notificacion", description = "Entidad que representa una notificación en el sistema")
 public class Notificacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID de la notificación", example = "1001")
     private Long idNotificacion;
 
-    @Column(name = "usuarioId", length = 20)
+    @Schema(description = "ID del usuario al que pertenece la notificación", example = "1")
     private Long usuarioId;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
+    @Schema(description = "Mensaje del contenido de la notificación", example = "Su cita fue confirmada con éxito")
     private String mensaje;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Schema(description = "Fecha de creación de la notificación", example = "2025-07-06T12:00:00")
     private Date fecha;
 
-    @Column(nullable = false)
-    private boolean leido;
+    @Schema(description = "Indica si la notificación ha sido leída", example = "false")
+    private Boolean leido;
 
-    @Column(name = "creado_por", length = 100)
+    @Schema(description = "Correo del creador de la notificación", example = "admin@demo.com")
     private String creadoPor;
 }
