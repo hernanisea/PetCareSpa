@@ -60,7 +60,7 @@ public class RazaController {
 
     @Operation(summary = "Crear una nueva raza")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Raza creada exitosamente",
+        @ApiResponse(responseCode = "201", description = "Raza creada exitosamente",
                 content = @Content(schema = @Schema(implementation = Raza.class)))
     })
     @PostMapping

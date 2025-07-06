@@ -26,14 +26,7 @@ public class ReservaService {
     public Reservas guardarReserva(ReservaRequest request) {
         validarEntidades(request.getUsuarioId(), request.getMascotaId());
 
-        Reservas reserva = new Reservas();
-        reserva.setFechaReserva(request.getFechaReserva());
-        reserva.setUsuarioId(request.getUsuarioId());
-        reserva.setMascotaId(request.getMascotaId());
-        reserva.setFechaCreacion(LocalDateTime.now());
-        reserva.setEstado(true);
-
-        return reservaRepository.save(reserva);
+        return crearReserva(request.getFechaReserva(), request.getUsuarioId(), request.getMascotaId());
     }
 
     public Reservas actualizarReserva(Long id, ReservaRequest request) {
@@ -59,10 +52,27 @@ public class ReservaService {
         return reservaRepository.findAll();
     }
 
+    public Reservas crearReserva(LocalDateTime fechaReserva, Long usuarioId, Long mascotaId) {
+        Reservas reserva = new Reservas();
+        reserva.setFechaReserva(fechaReserva);
+        reserva.setEstado(true);
+        reserva.setFechaCreacion(LocalDateTime.now());
+        reserva.setUsuarioId(usuarioId);
+        reserva.setMascotaId(mascotaId);
+        return reservaRepository.save(reserva);
+    }
+
     private void validarEntidades(Long usuarioId, Long mascotaId) {
-        if (usuarioClient.getUsuarioById(usuarioId).isEmpty())
+        try {
+            usuarioClient.getUsuarioById(usuarioId);
+        } catch (Exception e) {
             throw new RuntimeException("Usuario no encontrado");
-        if (mascotaClient.getMascotaById(mascotaId).isEmpty())
+        }
+
+        try {
+            mascotaClient.getMascotaById(mascotaId);
+        } catch (Exception e) {
             throw new RuntimeException("Mascota no encontrada");
+        }
     }
 }

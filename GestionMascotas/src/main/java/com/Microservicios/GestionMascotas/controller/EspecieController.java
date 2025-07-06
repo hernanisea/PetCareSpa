@@ -46,7 +46,7 @@ public class EspecieController {
 
     @Operation(summary = "Crear una nueva especie")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Especie creada exitosamente",
+        @ApiResponse(responseCode = "201", description = "Especie creada exitosamente",
                 content = @Content(schema = @Schema(implementation = Especie.class)))
     })
     @PostMapping("/api/v1/especies")
