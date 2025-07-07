@@ -27,10 +27,8 @@ public class HistorialClinicoController {
     }
 
     @Operation(summary = "Listar todos los historiales clínicos")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de historiales obtenida exitosamente",
-                content = @Content(schema = @Schema(implementation = HistorialClinico.class)))
-    })
+    @ApiResponse(responseCode = "200", description = "Lista de historiales obtenida exitosamente",
+        content = @Content(schema = @Schema(implementation = HistorialClinico.class)))
     @GetMapping
     public ResponseEntity<List<HistorialClinico>> listarHistoriales() {
         return ResponseEntity.ok(historialClinicoService.listarHistoriales());
@@ -39,22 +37,19 @@ public class HistorialClinicoController {
     @Operation(summary = "Obtener historial clínico por ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Historial encontrado",
-                content = @Content(schema = @Schema(implementation = HistorialClinico.class))),
+            content = @Content(schema = @Schema(implementation = HistorialClinico.class))),
         @ApiResponse(responseCode = "404", description = "Historial no encontrado")
     })
     @GetMapping("/{id}")
     public ResponseEntity<HistorialClinico> obtenerHistorial(@PathVariable Long id) {
-        return ResponseEntity.ok(historialClinicoService.listarHistoriales().stream()
-                .filter(h -> h.getIdHistorial().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Historial no encontrado")));
+        return historialClinicoService.obtenerPorId(id)
+            .map(ResponseEntity::ok)
+            .orElseThrow(() -> new RuntimeException("Historial no encontrado"));
     }
 
     @Operation(summary = "Crear un nuevo historial clínico")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Historial creado exitosamente",
-                content = @Content(schema = @Schema(implementation = HistorialClinico.class)))
-    })
+    @ApiResponse(responseCode = "201", description = "Historial creado exitosamente",
+        content = @Content(schema = @Schema(implementation = HistorialClinico.class)))
     @PostMapping
     public ResponseEntity<HistorialClinico> crearHistorial(@RequestBody HistorialClinicoRequest request) {
         return ResponseEntity.ok(historialClinicoService.guardarHistorial(request));
@@ -63,7 +58,7 @@ public class HistorialClinicoController {
     @Operation(summary = "Actualizar un historial clínico existente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Historial actualizado correctamente",
-                content = @Content(schema = @Schema(implementation = HistorialClinico.class))),
+            content = @Content(schema = @Schema(implementation = HistorialClinico.class))),
         @ApiResponse(responseCode = "404", description = "Historial no encontrado")
     })
     @PutMapping("/{id}")

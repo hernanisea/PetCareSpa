@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -13,10 +13,10 @@
   </parent>
 
   <groupId>com.example</groupId>
-  <artifactId>GestionDeServicios</artifactId>
+  <artifactId>Gestion-Comentarios</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>GestionDeServicios</name>
-  <description>Demo project for Spring Boot</description>
+  <name>Gestion-Comentarios</name>
+  <description>Microservicio para gestionar comentarios</description>
 
   <properties>
     <java.version>21</java.version>
@@ -81,37 +81,30 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Mockito (opcional si ya está incluido por spring-boot-starter-test) -->
+    <!-- Mockito -->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
 
-    <!-- JUnit 5 explícito (opcional) -->
+    <!-- JUnit 5 -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
-	<!-- Swagger HATEOAS -->
 
+    <!-- Swagger y HATEOAS -->
     <dependency>
-
       <groupId>org.springdoc</groupId>
-
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-
       <version>2.8.9</version>
-
     </dependency>
 
     <dependency>
-
       <groupId>org.springframework.boot</groupId>
-
       <artifactId>spring-boot-starter-hateoas</artifactId>
-|
     </dependency>
 
   </dependencies>

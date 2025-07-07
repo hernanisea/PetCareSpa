@@ -2,6 +2,7 @@ package com.Microservicios.HistorialClinico.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,9 @@ public class HistorialClinicoService {
     private final UsuarioClient usuarioClient;
     private final MascotaClient mascotaClient;
 
-    public HistorialClinicoService(HistorialClinicoRepository historialClinicoRepository, 
-                                    UsuarioClient usuarioClient, 
-                                    MascotaClient mascotaClient) {
+    public HistorialClinicoService(HistorialClinicoRepository historialClinicoRepository,
+                                   UsuarioClient usuarioClient,
+                                   MascotaClient mascotaClient) {
         this.historialClinicoRepository = historialClinicoRepository;
         this.usuarioClient = usuarioClient;
         this.mascotaClient = mascotaClient;
@@ -33,13 +34,21 @@ public class HistorialClinicoService {
         return historialClinicoRepository.findAll();
     }
 
+    public Optional<HistorialClinico> obtenerPorId(Long id) {
+        return historialClinicoRepository.findById(id);
+    }
+
     public HistorialClinico guardarHistorial(HistorialClinicoRequest request) {
         validarUsuarioYMascota(request.getUsuarioId(), request.getMascotaId());
+
         HistorialClinico historial = new HistorialClinico();
         historial.setFecha(request.getFecha());
         historial.setDiagnostico(request.getDiagnostico());
+        historial.setAntecedentes(request.getAntecedentes());
+        historial.setComentarios(request.getComentarios());
         historial.setUsuarioId(request.getUsuarioId());
         historial.setMascotaId(request.getMascotaId());
+
         return historialClinicoRepository.save(historial);
     }
 
@@ -51,6 +60,8 @@ public class HistorialClinicoService {
 
         actual.setFecha(request.getFecha());
         actual.setDiagnostico(request.getDiagnostico());
+        actual.setAntecedentes(request.getAntecedentes());
+        actual.setComentarios(request.getComentarios());
         actual.setUsuarioId(request.getUsuarioId());
         actual.setMascotaId(request.getMascotaId());
 
@@ -61,15 +72,15 @@ public class HistorialClinicoService {
         historialClinicoRepository.deleteById(id);
     }
 
-private void validarUsuarioYMascota(Long usuarioId, Long mascotaId) {
-    Map<String, Object> usuario = usuarioClient.getUsuarioById(usuarioId);
-    if (usuario == null || usuario.isEmpty()) {
-        throw new RuntimeException("Usuario no encontrado");
-    }
+    private void validarUsuarioYMascota(Long usuarioId, Long mascotaId) {
+        Map<String, Object> usuario = usuarioClient.getUsuarioById(usuarioId);
+        if (usuario == null || usuario.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
 
-    Map<String, Object> mascota = mascotaClient.getMascotaById(mascotaId);
-    if (mascota == null || mascota.isEmpty()) {
-        throw new RuntimeException("Mascota no encontrada");
+        Map<String, Object> mascota = mascotaClient.getMascotaById(mascotaId);
+        if (mascota == null || mascota.isEmpty()) {
+            throw new RuntimeException("Mascota no encontrada");
+        }
     }
-}
 }

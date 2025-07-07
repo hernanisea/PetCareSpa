@@ -1,11 +1,9 @@
 package com.Microservicios.HistorialClinico.repository;
 
+import com.Microservicios.HistorialClinico.model.HistorialClinico;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import com.example.reservas.webclient.Microservicios.HistorialClinico.model.HistorialClinico;
-import com.example.reservas.webclient.Microservicios.HistorialClinico.repository.HistorialClinicoRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -28,7 +26,7 @@ public class HistorialClinicoRepositoryTest {
 
         HistorialClinico guardado = historialRepo.save(nuevo);
 
-        assertThat(guardado.getIdHistorial()).isNotNull();
+        assertThat(guardado.getId()).isNotNull(); // <- corregido aquí
         assertThat(guardado.getDiagnostico()).isEqualTo("Prueba de diagnóstico");
     }
 

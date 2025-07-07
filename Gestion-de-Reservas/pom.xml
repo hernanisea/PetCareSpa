@@ -13,17 +13,16 @@
   </parent>
 
   <groupId>com.example</groupId>
-  <artifactId>GestionDeServicios</artifactId>
+  <artifactId>Gestion-de-Reservas</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>GestionDeServicios</name>
-  <description>Demo project for Spring Boot</description>
+  <name>Gestion-de-Reservas</name>
+  <description>Microservicio para la gestión de reservas</description>
 
   <properties>
     <java.version>21</java.version>
   </properties>
 
   <dependencies>
-
     <!-- Spring Boot Web y JPA -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -81,39 +80,32 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Mockito (opcional si ya está incluido por spring-boot-starter-test) -->
+    <!-- Mockito -->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
 
-    <!-- JUnit 5 explícito (opcional) -->
+    <!-- JUnit 5 -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
-	<!-- Swagger HATEOAS -->
 
+    <!-- Swagger / OpenAPI -->
     <dependency>
-
       <groupId>org.springdoc</groupId>
-
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-
       <version>2.8.9</version>
-
     </dependency>
 
+    <!-- HATEOAS -->
     <dependency>
-
       <groupId>org.springframework.boot</groupId>
-
       <artifactId>spring-boot-starter-hateoas</artifactId>
-|
     </dependency>
-
   </dependencies>
 
   <build>
