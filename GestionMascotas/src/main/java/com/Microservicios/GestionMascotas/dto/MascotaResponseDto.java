@@ -1,10 +1,14 @@
 package com.Microservicios.GestionMascotas.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(name = "MascotaResponseDto", description = "DTO con la información pública de una mascota")
 public class MascotaResponseDto {
 

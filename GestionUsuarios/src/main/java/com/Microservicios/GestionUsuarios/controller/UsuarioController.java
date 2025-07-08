@@ -1,6 +1,7 @@
 package com.Microservicios.GestionUsuarios.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.Microservicios.GestionUsuarios.dto.RolConUsuariosResponse;
+import com.Microservicios.GestionUsuarios.dto.UsuarioRequest;
 import com.Microservicios.GestionUsuarios.dto.UsuarioResponse;
 import com.Microservicios.GestionUsuarios.model.Rol;
 import com.Microservicios.GestionUsuarios.model.Usuario;
@@ -77,7 +79,7 @@ public class UsuarioController {
     })
     @GetMapping
     public ResponseEntity<List<UsuarioResponse>> listarUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<Usuario> usuarios = usuarioService.obtenerUsuarios();
         List<UsuarioResponse> response = usuarios.stream()
                 .map(usuarioService::convertirUsuarioResponse)
                 .toList();
@@ -92,9 +94,7 @@ public class UsuarioController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponse> obtenerUsuario(@PathVariable Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
-
+        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
         UsuarioResponse dto = usuarioService.convertirUsuarioResponse(usuario);
         return ResponseEntity.ok(dto);
     }
@@ -108,13 +108,12 @@ public class UsuarioController {
     })
     @PostMapping
     @Transactional
-    public ResponseEntity<?> crearUsuario(@Valid @RequestBody UsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> crearUsuario(@Valid @RequestBody UsuarioRequest request) {
         if (usuarioRepository.existsByCorreo(request.getCorreo())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Ya existe un usuario con el correo: " + request.getCorreo());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe un usuario con el correo: " + request.getCorreo());
         }
 
-        Rol rol = rolRepository.findById(request.getId())
+        Rol rol = rolRepository.findById(request.getIdRol())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
 
         Usuario usuario = new Usuario();
@@ -125,8 +124,12 @@ public class UsuarioController {
         usuario.setEstado(request.getEstado());
         usuario.setTelefono(request.getTelefono());
         usuario.setRol(rol);
+        usuario.setRelaciones(request.getRelaciones());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
+        Usuario creado = usuarioRepository.save(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(usuarioService.convertirUsuarioResponse(creado));
+
     }
 
     @Operation(summary = "Actualizar un usuario existente")
@@ -137,11 +140,11 @@ public class UsuarioController {
     })
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> actualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioRequest request) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
 
-        Rol rol = rolRepository.findById(request.getId())
+        Rol rol = rolRepository.findById(request.getIdRol())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
 
         usuario.setNombre(request.getNombre());
@@ -151,8 +154,10 @@ public class UsuarioController {
         usuario.setEstado(request.getEstado());
         usuario.setTelefono(request.getTelefono());
         usuario.setRol(rol);
+        usuario.setRelaciones(request.getRelaciones());
 
-        return ResponseEntity.ok(usuarioRepository.save(usuario));
+        Usuario actualizado = usuarioRepository.save(usuario);
+        return ResponseEntity.ok(usuarioService.convertirUsuarioResponse(actualizado));
     }
 
     @Operation(summary = "Eliminar un usuario por su ID")
@@ -169,4 +174,51 @@ public class UsuarioController {
         usuarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Obtener las mascotas de un usuario por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de mascotas del usuario obtenida exitosamente",
+                content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
+                content = @Content)
+    })
+    @GetMapping("/{id}/mascotas")
+    public ResponseEntity<List<Map<String, Object>>> obtenerMascotasDelUsuario(@PathVariable Long id) {
+        List<Map<String, Object>> mascotas = usuarioService.obtenerMascotasDeUsuario(id);
+        return ResponseEntity.ok(mascotas);
+    }
+
+    @Operation(summary = "Obtener las direcciones de un usuario por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Direcciones del usuario obtenidas exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    @GetMapping("/{id}/direcciones")
+    public ResponseEntity<List<Map<String, Object>>> obtenerDireccionesDelUsuario(@PathVariable Long id) {
+        List<Map<String, Object>> direcciones = usuarioService.obtenerDireccionesDeUsuario(id);
+        return ResponseEntity.ok(direcciones);
+    }
+
+    @Operation(summary = "Obtener los comentarios de un usuario por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Comentarios del usuario obtenidos exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    @GetMapping("/{id}/comentarios")
+    public ResponseEntity<List<Map<String, Object>>> obtenerComentariosDelUsuario(@PathVariable Long id) {
+        List<Map<String, Object>> comentarios = usuarioService.obtenerComentariosDeUsuario(id);
+        return ResponseEntity.ok(comentarios);
+    }
+
+    @Operation(summary = "Obtener las notificaciones de un usuario por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Notificaciones del usuario obtenidas exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    @GetMapping("/{id}/notificaciones")
+    public ResponseEntity<List<Map<String, Object>>> obtenerNotificacionesDelUsuario(@PathVariable Long id) {
+        List<Map<String, Object>> notificaciones = usuarioService.obtenerNotificacionesDeUsuario(id);
+        return ResponseEntity.ok(notificaciones);
+    }
+
 }

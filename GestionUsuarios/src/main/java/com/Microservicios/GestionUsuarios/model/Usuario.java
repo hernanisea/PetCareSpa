@@ -1,7 +1,9 @@
 package com.Microservicios.GestionUsuarios.model;
 
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -41,7 +43,7 @@ public class Usuario {
     private String correo;
 
     @Column(nullable = false)
-    @Schema(hidden = true) 
+    @Schema(hidden = true)
     private String clave;
 
     @Schema(description = "Estado del usuario", example = "true")
@@ -50,20 +52,9 @@ public class Usuario {
     @Schema(description = "Número de teléfono", example = "987654321")
     private String telefono;
 
+    @Embedded
     @Schema(hidden = true)
-    private Long idDireccion;
-
-    @Schema(hidden = true)
-    private Long idMascota;
-
-    @Schema(hidden = true)
-    private Long idComentario;
-
-    @Schema(hidden = true)
-    private Long idNotificacion;
-
-    @Schema(hidden = true)
-    private Long idHistorial;
+    private RelacionesUsuario relaciones;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rol", nullable = false, foreignKey = @ForeignKey(name = "FK_usuario_rol"))

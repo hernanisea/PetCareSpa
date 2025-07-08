@@ -38,6 +38,10 @@ public class HistorialClinicoService {
         return historialClinicoRepository.findById(id);
     }
 
+    public List<HistorialClinico> obtenerPorUsuarioId(Long idUsuario) {
+        return historialClinicoRepository.findByUsuarioId(idUsuario);
+    }
+
     public HistorialClinico guardarHistorial(HistorialClinicoRequest request) {
         validarUsuarioYMascota(request.getUsuarioId(), request.getMascotaId());
 
