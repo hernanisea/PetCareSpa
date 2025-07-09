@@ -8,16 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RegionController.class)
@@ -32,39 +32,47 @@ public class RegionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final String TOKEN = "Bearer test-jwt-token";
-
     @Test
-    void listarTodasLasRegiones() throws Exception {
-        when(regionService.findAll()).thenReturn(List.of(new Region(1L, "Valparaíso")));
+    void obtenerTodasLasRegiones() throws Exception {
+        when(regionService.findAll()).thenReturn(Arrays.asList(
+                new Region(1L, "Región 1"),
+                new Region(2L, "Región 2")
+        ));
 
-        mockMvc.perform(get("/api/v1/direccion/regiones")
-                .header("Authorization", TOKEN))
+        mockMvc.perform(get("/api/v1/direccion/regiones"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].nombre").value("Valparaíso"));
+                .andExpect(jsonPath("$.size()").value(2));
     }
 
     @Test
-    void guardarRegion() throws Exception {
-        Region region = new Region(null, "Metropolitana");
-        when(regionService.save(any(Region.class))).thenReturn(new Region(1L, "Metropolitana"));
+    void obtenerRegionPorId() throws Exception {
+        Region region = new Region(1L, "Arica");
+
+        when(regionService.findById(1L)).thenReturn(Optional.of(region));
+
+        mockMvc.perform(get("/api/v1/direccion/regiones/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Arica"));
+    }
+
+    @Test
+    void crearRegion() throws Exception {
+        Region region = new Region(null, "Tarapacá");
+        Region regionGuardada = new Region(1L, "Tarapacá");
+
+        when(regionService.save(Mockito.any(Region.class))).thenReturn(regionGuardada);
 
         mockMvc.perform(post("/api/v1/direccion/regiones")
-                .header("Authorization", TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(region)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nombre").value("Metropolitana"));
+                .andExpect(jsonPath("$.idRegion").value(1))
+                .andExpect(jsonPath("$.nombre").value("Tarapacá"));
     }
 
     @Test
-    void buscarRegionPorId() throws Exception {
-        Region region = new Region(1L, "Ñuble");
-        when(regionService.findById(1L)).thenReturn(Optional.of(region));
-
-        mockMvc.perform(get("/api/v1/direccion/regiones/1")
-                .header("Authorization", TOKEN))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nombre").value("Ñuble"));
+    void eliminarRegion() throws Exception {
+        mockMvc.perform(delete("/api/v1/direccion/regiones/1"))
+                .andExpect(status().isOk()); // Tu método no retorna ResponseEntity, por eso espera 200
     }
 }
