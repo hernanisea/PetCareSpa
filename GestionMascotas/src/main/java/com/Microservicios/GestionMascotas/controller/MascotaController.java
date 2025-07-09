@@ -41,9 +41,9 @@ public class MascotaController {
         @ApiResponse(responseCode = "200", description = "Mascotas encontradas",
                 content = @Content(schema = @Schema(implementation = MascotaResponseDto.class)))
     })
-    @GetMapping
-    public ResponseEntity<List<MascotaResponseDto>> obtenerMascotasPorUsuario(@RequestParam(required = false) Long usuarioId) {
-        List<MascotaResponseDto> mascotas = mascotasService.obtenerPorUsuario(usuarioId);
+    @GetMapping("/usuarios/{id}/mascotas")
+    public ResponseEntity<List<MascotaResponseDto>> obtenerMascotasDeUsuario(@PathVariable Long id) {
+        List<MascotaResponseDto> mascotas = mascotasService.obtenerPorUsuario(id);
         return ResponseEntity.ok(mascotas);
     }
 

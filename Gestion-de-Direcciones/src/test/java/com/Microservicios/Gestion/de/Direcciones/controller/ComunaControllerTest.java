@@ -1,5 +1,6 @@
 package com.Microservicios.Gestion.de.Direcciones.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -9,6 +10,7 @@ import com.Microservicios.Gestion.de.Direcciones.service.ComunaService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +35,8 @@ public class ComunaControllerTest {
     private Comuna comuna;
     private Region region;
 
+    private static final String TOKEN = "Bearer test-jwt-token";
+
     @BeforeEach
     void setup() {
         region = new Region(1L, "Valparaíso");
@@ -43,7 +47,8 @@ public class ComunaControllerTest {
     void testGetAllComunas() throws Exception {
         when(comunaService.findAll()).thenReturn(List.of(comuna));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/direccion/comunas"))
+        mockMvc.perform(get("/api/v1/direccion/comunas")
+                .header("Authorization", TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nombre").value("Viña del Mar"));
     }
@@ -52,7 +57,8 @@ public class ComunaControllerTest {
     void testGetComunaById() throws Exception {
         when(comunaService.findById(1L)).thenReturn(Optional.of(comuna));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/direccion/comunas/1"))
+        mockMvc.perform(get("/api/v1/direccion/comunas/1")
+                .header("Authorization", TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Viña del Mar"));
     }
@@ -61,9 +67,10 @@ public class ComunaControllerTest {
     void testSaveComuna() throws Exception {
         when(comunaService.save(any(Comuna.class))).thenReturn(comuna);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/direccion/comunas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(comuna)))
+        mockMvc.perform(post("/api/v1/direccion/comunas")
+                .header("Authorization", TOKEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(comuna)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Viña del Mar"));
     }
@@ -72,7 +79,8 @@ public class ComunaControllerTest {
     void testDeleteComuna() throws Exception {
         doNothing().when(comunaService).delete(1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/direccion/comunas/1"))
+        mockMvc.perform(delete("/api/v1/direccion/comunas/1")
+                .header("Authorization", TOKEN))
                 .andExpect(status().isOk());
     }
 }

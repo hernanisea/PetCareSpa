@@ -31,7 +31,7 @@ public class DireccionServiceTest {
     @Test
     void guardarDireccionConUsuarioValido() {
         Comuna comuna = new Comuna();
-        Direccion direccion = new Direccion(null, "Test Calle", "Depto", 123, comuna, 1L);
+        Direccion direccion = new Direccion(null, "Test Calle", "Depto", 123, 1L, comuna);
 
         when(usuarioClient.getUsuarioById(1L)).thenReturn(java.util.Map.of("id", 1L));
         when(direccionRepository.save(direccion)).thenReturn(direccion);
@@ -44,7 +44,7 @@ public class DireccionServiceTest {
 
     @Test
     void buscarDireccionPorId() {
-        Direccion direccion = new Direccion(1L, "Calle X", "Casa", 1234, null, 1L);
+        Direccion direccion = new Direccion();
         when(direccionRepository.findById(1L)).thenReturn(Optional.of(direccion));
 
         Optional<Direccion> resultado = direccionService.findById(1L);

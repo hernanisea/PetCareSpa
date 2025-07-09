@@ -32,11 +32,14 @@ public class DireccionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final String TOKEN = "Bearer test-jwt-token";
+
     @Test
     void obtenerTodasLasDirecciones() throws Exception {
         when(direccionService.findAll()).thenReturn(List.of());
 
-        mockMvc.perform(get("/api/v1/direccion/direcciones"))
+        mockMvc.perform(get("/api/v1/direccion/direcciones")
+                .header("Authorization", TOKEN))
                 .andExpect(status().isOk());
     }
 
@@ -50,18 +53,21 @@ public class DireccionControllerTest {
         when(direccionService.save(any(Direccion.class))).thenReturn(direccion);
 
         mockMvc.perform(post("/api/v1/direccion/direcciones")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(direccion)))
+                .header("Authorization", TOKEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(direccion)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.calle").value("Nueva calle"));
     }
 
     @Test
     void buscarDireccionPorId() throws Exception {
-        Direccion direccion = new Direccion(1L, "Test", "Depto", 12345, null, 1L);
+        Direccion direccion = new Direccion();
+        direccion.setCalle("Test");
         when(direccionService.findById(1L)).thenReturn(Optional.of(direccion));
 
-        mockMvc.perform(get("/api/v1/direccion/direcciones/1"))
+        mockMvc.perform(get("/api/v1/direccion/direcciones/1")
+                .header("Authorization", TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.calle").value("Test"));
     }

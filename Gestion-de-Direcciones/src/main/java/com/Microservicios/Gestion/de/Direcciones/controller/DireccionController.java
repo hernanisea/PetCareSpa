@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Microservicios.Gestion.de.Direcciones.dto.DireccionRequest;
+import com.Microservicios.Gestion.de.Direcciones.dto.DireccionRequestDto;
+import com.Microservicios.Gestion.de.Direcciones.dto.DireccionResponse;
 import com.Microservicios.Gestion.de.Direcciones.model.Direccion;
 import com.Microservicios.Gestion.de.Direcciones.service.DireccionService;
 
@@ -21,7 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping("/api/v1/direccion/direcciones")
+@RequestMapping("/api/v1")
 public class DireccionController {
 
     private final DireccionService direccionService;
@@ -31,49 +34,67 @@ public class DireccionController {
     }
 
     @Operation(summary = "Listar todas las direcciones")
-    @ApiResponse(responseCode = "200", description = "Lista de direcciones",
+    @ApiResponse(responseCode = "200", description = "Direcciones listadas",
             content = @Content(schema = @Schema(implementation = Direccion.class)))
-    @GetMapping
-    public List<Direccion> findAllDirecciones() {
-        return direccionService.findAll();
+    @GetMapping("/direcciones")
+    public ResponseEntity<List<Direccion>> getAllDirecciones() {
+        return ResponseEntity.ok(direccionService.findAll());
     }
 
-    @Operation(summary = "Obtener una dirección por ID")
+    @Operation(summary = "Buscar dirección por ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Dirección encontrada",
                 content = @Content(schema = @Schema(implementation = Direccion.class))),
         @ApiResponse(responseCode = "404", description = "Dirección no encontrada")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<Direccion> findDireccionById(@PathVariable Long id) {
+    @GetMapping("/direcciones/{id}")
+    public ResponseEntity<Direccion> getDireccionById(@PathVariable Long id) {
         return direccionService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Obtener direcciones por ID de usuario")
-    @ApiResponse(responseCode = "200", description = "Direcciones encontradas para el usuario")
-    @GetMapping("/usuario/{usuarioId}")
-    public List<Direccion> getDireccionesByUsuarioId(@PathVariable Long usuarioId) {
-        return direccionService.findByUsuarioId(usuarioId);
+    @Operation(summary = "Listar direcciones por ID de usuario")
+    @ApiResponse(responseCode = "200", description = "Direcciones del usuario listadas")
+    @GetMapping("/usuarios/{usuarioId}/direcciones")
+    public ResponseEntity<List<Direccion>> getDireccionesByUsuario(@PathVariable Long usuarioId) {
+        List<Direccion> direcciones = direccionService.findByUsuarioId(usuarioId);
+        return ResponseEntity.ok(direcciones);
     }
 
-    @Operation(summary = "Crear una nueva dirección")
-    @ApiResponse(responseCode = "200", description = "Dirección creada",
-            content = @Content(schema = @Schema(implementation = Direccion.class)))
-    @PostMapping
-    public Direccion saveDireccion(@RequestBody Direccion direccion) {
-        return direccionService.save(direccion);
+    @Operation(summary = "Crear nueva dirección")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Dirección creada",
+                content = @Content(schema = @Schema(implementation = Direccion.class))),
+        @ApiResponse(responseCode = "400", description = "Usuario no válido")
+    })
+    @PostMapping("/direcciones")
+    public ResponseEntity<DireccionResponse> createDireccion(@RequestBody DireccionRequest request) {
+        Direccion direccion = direccionService.saveFromDto(request);
+        DireccionResponse response = mapToResponse(direccion);
+        return ResponseEntity.status(201).body(response);
     }
 
-    @Operation(summary = "Eliminar una dirección por ID")
+    private DireccionResponse mapToResponse(Direccion direccion) {
+        DireccionResponse dto = new DireccionResponse();
+        dto.setIdDireccion(direccion.getIdDireccion());
+        dto.setCalle(direccion.getCalle());
+        dto.setDescripcion(direccion.getDescripcion());
+        dto.setCodigoPostal(direccion.getCodigoPostal());
+        dto.setUsuarioId(direccion.getUsuarioId());
+        dto.setComuna(direccion.getComuna().getNombre());
+        dto.setRegion(direccion.getComuna().getRegion().getNombre());
+        return dto;
+    }
+
+    @Operation(summary = "Eliminar dirección por ID")
     @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Dirección eliminada"),
         @ApiResponse(responseCode = "404", description = "Dirección no encontrada")
     })
-    @DeleteMapping("/{id}")
-    public void deleteDireccion(@PathVariable Long id) {
+    @DeleteMapping("/direcciones/{id}")
+    public ResponseEntity<Void> deleteDireccion(@PathVariable Long id) {
         direccionService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
-

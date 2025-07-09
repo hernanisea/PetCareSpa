@@ -40,11 +40,11 @@ public class LoadDatabase {
                 Raza iguana = razaService.guardar(new Raza(0, "Iguana Verde", null));
 
                 // Llamadas al nuevo método desde parámetros
-                mascotasService.crearMascotaDesdeParametros(101L, "Fido", 3, "Macho", 25, new Date(), canina.getIdEspecie(), labrador.getIdRaza(), null);
-                mascotasService.crearMascotaDesdeParametros(102L, "Mishi", 2, "Hembra", 4, new Date(), felina.getIdEspecie(), siames.getIdRaza(), null);
-                mascotasService.crearMascotaDesdeParametros(103L, "Pío", 1, "Macho", 0, new Date(), ave.getIdEspecie(), canario.getIdRaza(), null);
-                mascotasService.crearMascotaDesdeParametros(104L, "Bola", 1, "Hembra", 0, new Date(), roedor.getIdEspecie(), hamster.getIdRaza(), null);
-                mascotasService.crearMascotaDesdeParametros(105L, "Rex", 4, "Macho", 2, new Date(), reptil.getIdEspecie(), iguana.getIdRaza(), null);
+                mascotasService.crearMascotaDesdeParametros(1L, "Fido", 3, "Macho", 25, new Date(), canina.getIdEspecie(), labrador.getIdRaza(), null);
+                mascotasService.crearMascotaDesdeParametros(2L, "Mishi", 2, "Hembra", 4, new Date(), felina.getIdEspecie(), siames.getIdRaza(), null);
+                mascotasService.crearMascotaDesdeParametros(3L, "Pío", 1, "Macho", 0, new Date(), ave.getIdEspecie(), canario.getIdRaza(), null);
+                mascotasService.crearMascotaDesdeParametros(4L, "Bola", 1, "Hembra", 0, new Date(), roedor.getIdEspecie(), hamster.getIdRaza(), null);
+                mascotasService.crearMascotaDesdeParametros(5L, "Rex", 4, "Macho", 2, new Date(), reptil.getIdEspecie(), iguana.getIdRaza(), null);
 
                 System.out.println("Especies, razas y mascotas de ejemplo cargadas correctamente.");
             } else {

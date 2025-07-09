@@ -1,7 +1,14 @@
 package com.Microservicios.Gestion.de.Direcciones.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,13 +37,15 @@ public class Direccion {
     @Column(nullable = false)
     @Schema(description = "Código postal", example = "8320000")
     private int codigoPostal;
+    
+    @Column(nullable = false)
+    @Schema(description = "ID del usuario asociado a esta dirección", example = "5")
+    private Long usuarioId;
 
     @ManyToOne
     @JoinColumn(name = "id_comuna", nullable = false)
     @Schema(description = "Comuna donde se ubica la dirección")
     private Comuna comuna;
 
-    @Column(nullable = false)
-    @Schema(description = "ID del usuario asociado a esta dirección", example = "5")
-    private Long usuarioId;
+   
 }

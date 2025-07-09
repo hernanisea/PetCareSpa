@@ -32,11 +32,14 @@ public class RegionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final String TOKEN = "Bearer test-jwt-token";
+
     @Test
     void listarTodasLasRegiones() throws Exception {
         when(regionService.findAll()).thenReturn(List.of(new Region(1L, "Valparaíso")));
 
-        mockMvc.perform(get("/api/v1/direccion/regiones"))
+        mockMvc.perform(get("/api/v1/direccion/regiones")
+                .header("Authorization", TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nombre").value("Valparaíso"));
     }
@@ -47,8 +50,9 @@ public class RegionControllerTest {
         when(regionService.save(any(Region.class))).thenReturn(new Region(1L, "Metropolitana"));
 
         mockMvc.perform(post("/api/v1/direccion/regiones")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(region)))
+                .header("Authorization", TOKEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(region)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Metropolitana"));
     }
@@ -58,7 +62,8 @@ public class RegionControllerTest {
         Region region = new Region(1L, "Ñuble");
         when(regionService.findById(1L)).thenReturn(Optional.of(region));
 
-        mockMvc.perform(get("/api/v1/direccion/regiones/1"))
+        mockMvc.perform(get("/api/v1/direccion/regiones/1")
+                .header("Authorization", TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Ñuble"));
     }
