@@ -47,28 +47,31 @@ public class MascotasService {
         return toResponseDto(mascota);
     }
 
-    @Transactional
     public MascotaResponseDto crearMascota(MascotaRequestDto dto) {
-        usuarioClient.validarUsuarioExiste(dto.getIdUsuario());
+        try {
+            usuarioClient.validarUsuarioExiste(dto.getIdUsuario());
 
-        Especie especie = especieRepository.findById(dto.getEspecieId())
-                .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + dto.getEspecieId()));
+            Especie especie = especieRepository.findById(dto.getEspecieId())
+                    .orElseThrow(() -> new RuntimeException("Especie no encontrada con ID: " + dto.getEspecieId()));
 
-        Raza raza = razaRepository.findById(dto.getRazaId())
-                .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + dto.getRazaId()));
+            Raza raza = razaRepository.findById(dto.getRazaId())
+                    .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + dto.getRazaId()));
 
-        Mascotas mascota = new Mascotas();
-        mascota.setNombre(dto.getNombre());
-        mascota.setEdad(dto.getEdad());
-        mascota.setSexo(dto.getSexo());
-        mascota.setIdUsuario(dto.getIdUsuario());
-        mascota.setPesoKg(0);
-        mascota.setFechaRegistro(new Date());
-        mascota.setEspecie(especie);
-        mascota.setRaza(raza);
-        Mascotas guardada = mascotaRepository.save(mascota);
+            Mascotas mascota = new Mascotas();
+            mascota.setNombre(dto.getNombre());
+            mascota.setEdad(dto.getEdad());
+            mascota.setSexo(dto.getSexo());
+            mascota.setIdUsuario(dto.getIdUsuario());
+            mascota.setPesoKg(0);
+            mascota.setFechaRegistro(new Date());
+            mascota.setEspecie(especie);
+            mascota.setRaza(raza);
+            Mascotas guardada = mascotaRepository.save(mascota);
 
-        return toResponseDto(guardada);
+            return toResponseDto(guardada);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear la mascota: " + e.getMessage(), e);
+        }
     }
 
     @Transactional

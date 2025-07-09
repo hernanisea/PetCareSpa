@@ -30,7 +30,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
 
@@ -50,16 +50,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (usuario != null && jwtUtil.isTokenValid(jwt)) {
                 // Obtener el nombre del rol del usuario
-                String nombreRol = usuario.getRol().getNombre(); 
+                String nombreRol = usuario.getRol().getNombre();
 
-               
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + nombreRol);
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         usuario,
-                        null,
-                        List.of(authority) 
-                );
+                        jwt, // ✅ Guardamos el JWT aquí
+                        List.of(authority));
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);

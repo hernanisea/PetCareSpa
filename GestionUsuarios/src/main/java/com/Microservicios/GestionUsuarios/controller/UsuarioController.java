@@ -54,9 +54,8 @@ public class UsuarioController {
 
     @Operation(summary = "Obtener todos los roles disponibles")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de roles encontrada",
-                content = @Content(schema = @Schema(implementation = RolConUsuariosResponse.class))),
-        @ApiResponse(responseCode = "204", description = "No se encontraron roles")
+            @ApiResponse(responseCode = "200", description = "Lista de roles encontrada", content = @Content(schema = @Schema(implementation = RolConUsuariosResponse.class))),
+            @ApiResponse(responseCode = "204", description = "No se encontraron roles")
     })
     @GetMapping("/roles")
     public ResponseEntity<List<RolConUsuariosResponse>> getRolesConUsuarios() {
@@ -74,8 +73,7 @@ public class UsuarioController {
 
     @Operation(summary = "Listar todos los usuarios")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de usuarios encontrada",
-                content = @Content(schema = @Schema(implementation = UsuarioResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Lista de usuarios encontrada", content = @Content(schema = @Schema(implementation = UsuarioResponse.class)))
     })
     @GetMapping
     public ResponseEntity<List<UsuarioResponse>> listarUsuarios() {
@@ -88,9 +86,8 @@ public class UsuarioController {
 
     @Operation(summary = "Obtener un usuario por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario encontrado",
-                content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+            @ApiResponse(responseCode = "200", description = "Usuario encontrado", content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponse> obtenerUsuario(@PathVariable Long id) {
@@ -101,16 +98,16 @@ public class UsuarioController {
 
     @Operation(summary = "Crear un nuevo usuario")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente",
-                content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
-        @ApiResponse(responseCode = "409", description = "El correo ya está registrado"),
-        @ApiResponse(responseCode = "404", description = "Rol no encontrado")
+            @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente", content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
+            @ApiResponse(responseCode = "409", description = "El correo ya está registrado"),
+            @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
     @PostMapping
     @Transactional
     public ResponseEntity<UsuarioResponse> crearUsuario(@Valid @RequestBody UsuarioRequest request) {
         if (usuarioRepository.existsByCorreo(request.getCorreo())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe un usuario con el correo: " + request.getCorreo());
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Ya existe un usuario con el correo: " + request.getCorreo());
         }
 
         Rol rol = rolRepository.findById(request.getIdRol())
@@ -134,15 +131,16 @@ public class UsuarioController {
 
     @Operation(summary = "Actualizar un usuario existente")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente",
-                content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
-        @ApiResponse(responseCode = "404", description = "Usuario o rol no encontrado")
+            @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Usuario o rol no encontrado")
     })
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<UsuarioResponse> actualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> actualizarUsuario(@PathVariable Long id,
+            @Valid @RequestBody UsuarioRequest request) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
 
         Rol rol = rolRepository.findById(request.getIdRol())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
@@ -162,8 +160,8 @@ public class UsuarioController {
 
     @Operation(summary = "Eliminar un usuario por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Usuario eliminado correctamente"),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+            @ApiResponse(responseCode = "204", description = "Usuario eliminado correctamente"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @DeleteMapping("/{id}")
     @Transactional
@@ -175,23 +173,28 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}/mascotas")
     @Operation(summary = "Obtener las mascotas de un usuario por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de mascotas del usuario obtenida exitosamente",
-                content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
-                content = @Content)
+            @ApiResponse(responseCode = "200", description = "Lista de mascotas del usuario obtenida exitosamente", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
     })
-    @GetMapping("/{id}/mascotas")
-    public ResponseEntity<List<Map<String, Object>>> obtenerMascotasDelUsuario(@PathVariable Long id) {
-        List<Map<String, Object>> mascotas = usuarioService.obtenerMascotasDeUsuario(id);
-        return ResponseEntity.ok(mascotas);
+    public ResponseEntity<?> obtenerMascotasDelUsuario(@PathVariable Long id) {
+        try {
+            List<Map<String, Object>> mascotas = usuarioService.obtenerMascotasDeUsuario(id);
+            return ResponseEntity.ok(mascotas);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado: " + ex.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno: " + e.getMessage());
+        }
     }
 
     @Operation(summary = "Obtener las direcciones de un usuario por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Direcciones del usuario obtenidas exitosamente"),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+            @ApiResponse(responseCode = "200", description = "Direcciones del usuario obtenidas exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @GetMapping("/{id}/direcciones")
     public ResponseEntity<List<Map<String, Object>>> obtenerDireccionesDelUsuario(@PathVariable Long id) {
@@ -201,8 +204,8 @@ public class UsuarioController {
 
     @Operation(summary = "Obtener los comentarios de un usuario por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Comentarios del usuario obtenidos exitosamente"),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+            @ApiResponse(responseCode = "200", description = "Comentarios del usuario obtenidos exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @GetMapping("/{id}/comentarios")
     public ResponseEntity<List<Map<String, Object>>> obtenerComentariosDelUsuario(@PathVariable Long id) {
@@ -212,8 +215,8 @@ public class UsuarioController {
 
     @Operation(summary = "Obtener las notificaciones de un usuario por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Notificaciones del usuario obtenidas exitosamente"),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+            @ApiResponse(responseCode = "200", description = "Notificaciones del usuario obtenidas exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @GetMapping("/{id}/notificaciones")
     public ResponseEntity<List<Map<String, Object>>> obtenerNotificacionesDelUsuario(@PathVariable Long id) {

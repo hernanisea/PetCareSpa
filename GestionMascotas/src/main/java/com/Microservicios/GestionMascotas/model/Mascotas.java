@@ -33,7 +33,7 @@ public class Mascotas {
     private Long idMascota;
 
     @Schema(description = "ID del usuario dueño de la mascota", example = "3")
-    @Column(nullable = false)
+    @Column(name= "id_usuario",nullable = false)
     private Long idUsuario;
 
     @Schema(description = "Nombre de la mascota", example = "Luna")
