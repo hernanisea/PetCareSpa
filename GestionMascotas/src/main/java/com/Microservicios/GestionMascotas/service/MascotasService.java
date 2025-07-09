@@ -27,7 +27,7 @@ public class MascotasService {
     private final UsuarioClient usuarioClient;
 
     public MascotasService(MascotaRepository mascotaRepository, EspecieRepository especieRepository,
-                           RazaRepository razaRepository, UsuarioClient usuarioClient) {
+            RazaRepository razaRepository, UsuarioClient usuarioClient) {
         this.mascotaRepository = mascotaRepository;
         this.especieRepository = especieRepository;
         this.razaRepository = razaRepository;
@@ -35,10 +35,17 @@ public class MascotasService {
     }
 
     public List<MascotaResponseDto> obtenerPorUsuario(Long usuarioId) {
-        List<Mascotas> mascotas = (usuarioId != null) ?
-            mascotaRepository.findByIdUsuario(usuarioId) :
-            mascotaRepository.findAll();
+        List<Mascotas> mascotas = (usuarioId != null)
+                ? mascotaRepository.findByIdUsuario(usuarioId)
+                : mascotaRepository.findAll();
         return mascotas.stream().map(this::toResponseDto).collect(Collectors.toList());
+    }
+
+    public List<MascotaResponseDto> obtenerTodasLasMascotas() {
+        List<Mascotas> mascotas = mascotaRepository.findAll();
+        return mascotas.stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     public MascotaResponseDto obtenerPorId(Long idMascota) {
@@ -76,7 +83,7 @@ public class MascotasService {
 
     @Transactional
     public MascotaResponseDto crearMascotaDesdeParametros(Long idUsuario, String nombre, int edad, String sexo, int pesoKg,
-                                                          Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
+            Date fechaRegistro, Long idEspecie, Long idRaza, Long idReserva) {
         MascotaRequestDto dto = new MascotaRequestDto();
         dto.setIdUsuario(idUsuario);
         dto.setNombre(nombre);
@@ -126,4 +133,5 @@ public class MascotasService {
         dto.setRaza(mascota.getRaza().getNombre());
         return dto;
     }
-} 
+
+}

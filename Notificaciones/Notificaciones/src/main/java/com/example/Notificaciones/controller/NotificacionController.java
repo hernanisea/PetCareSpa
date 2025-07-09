@@ -1,34 +1,45 @@
 package com.example.Notificaciones.controller;
 
-import com.example.Notificaciones.dto.NotificacionConUsuarioResponse;
-import com.example.Notificaciones.dto.NotificacionRequest;
-import com.example.Notificaciones.model.Notificacion;
-import com.example.Notificaciones.security.JwtUtil;
-import com.example.Notificaciones.service.NotificacionService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import com.example.Notificaciones.dto.NotificacionConUsuarioResponse;
+import com.example.Notificaciones.dto.NotificacionRequest;
+import com.example.Notificaciones.model.Notificacion;
+import com.example.Notificaciones.security.JwtUtil;
+import com.example.Notificaciones.service.NotificacionService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/notificaciones")
 @Validated
 public class NotificacionController {
 
-    @Autowired NotificacionService notificacionService;
+    @Autowired
+    NotificacionService notificacionService;
 
-    @Autowired JwtUtil jwtUtil;
+    @Autowired
+    JwtUtil jwtUtil;
 
     @Operation(summary = "Obtener todas las notificaciones")
     @ApiResponse(responseCode = "200", description = "Lista de notificaciones obtenida",
@@ -79,6 +90,18 @@ public class NotificacionController {
         }
     }
 
+    @Operation(summary = "Obtener una notificación por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Notificación encontrada",
+                content = @Content(schema = @Schema(implementation = Notificacion.class))),
+        @ApiResponse(responseCode = "404", description = "Notificación no encontrada")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<Notificacion> obtenerPorId(@PathVariable Long id) {
+        Notificacion noti = notificacionService.obtenerPorId(id);
+        return ResponseEntity.ok(noti);
+    }
+
     @Operation(summary = "Crear una nueva notificación (requiere JWT)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Notificación creada exitosamente",
@@ -87,11 +110,20 @@ public class NotificacionController {
     })
     @PostMapping
     public ResponseEntity<Notificacion> crear(@Valid @RequestBody NotificacionRequest request,
-                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {
+            // Primero validar si el usuario existe
+            notificacionService.validarUsuarioExistente(request.getUsuarioId());
+
+            // Luego extraer el correo del creador
             String correoUsuario = jwtUtil.extraerCorreoDesdeToken(authHeader);
+
+            // Crear notificación
             Notificacion creada = notificacionService.crearDesdeDTO(request, correoUsuario);
             return ResponseEntity.status(HttpStatus.CREATED).body(creada);
+
+        } catch (ResponseStatusException ex) {
+            throw ex; // re-lanzar excepciones personalizadas (como usuario inexistente)
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token inválido o no proporcionado", e);
         }

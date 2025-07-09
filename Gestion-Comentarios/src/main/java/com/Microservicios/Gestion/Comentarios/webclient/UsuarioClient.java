@@ -21,13 +21,12 @@ public class UsuarioClient {
         return this.webClient.get()
                 .uri("/{id}", id)
                 .retrieve()
-                .onStatus(status -> status.is4xxClientError(), response
-                        -> response.bodyToMono(String.class).flatMap(body
-                        -> // Puedes usar una excepción personalizada si quieres
-                        Mono.error(new IllegalArgumentException("Usuario con ID " + id + " no existe."))
-                )
+                .onStatus(status -> status.is4xxClientError(), response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(msg -> Mono.error(new RuntimeException("Usuario no encontrado con ID: " + id)))
                 )
                 .bodyToMono(Map.class)
                 .block();
     }
 }
+

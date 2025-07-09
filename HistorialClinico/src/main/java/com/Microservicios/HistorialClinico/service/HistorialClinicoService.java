@@ -23,8 +23,8 @@ public class HistorialClinicoService {
     private final MascotaClient mascotaClient;
 
     public HistorialClinicoService(HistorialClinicoRepository historialClinicoRepository,
-                                   UsuarioClient usuarioClient,
-                                   MascotaClient mascotaClient) {
+            UsuarioClient usuarioClient,
+            MascotaClient mascotaClient) {
         this.historialClinicoRepository = historialClinicoRepository;
         this.usuarioClient = usuarioClient;
         this.mascotaClient = mascotaClient;
@@ -87,4 +87,9 @@ public class HistorialClinicoService {
             throw new RuntimeException("Mascota no encontrada");
         }
     }
+
+    public List<HistorialClinico> obtenerPorMascotaId(Long idMascota) {
+        return historialClinicoRepository.findByMascotaId(idMascota);
+    }
+
 }

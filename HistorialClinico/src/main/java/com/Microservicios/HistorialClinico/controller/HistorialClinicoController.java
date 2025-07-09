@@ -76,11 +76,31 @@ public class HistorialClinicoController {
         historialClinicoService.eliminarHistorial(id);
         return ResponseEntity.noContent().build();
     }
-
     
+    @Operation(summary = "Obtener historiales clínicos por ID de usuario")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Historiales encontrados",
+                content = @Content(schema = @Schema(implementation = HistorialClinico.class))),
+        @ApiResponse(responseCode = "404", description = "No se encontraron historiales para el usuario")
+    })
     @GetMapping("/usuario/{idUsuario}")
     public List<HistorialClinico> obtenerPorUsuario(@PathVariable Long idUsuario) {
         return historialClinicoService.obtenerPorUsuarioId(idUsuario);
+    }
+
+    @Operation(summary = "Obtener historiales clínicos por ID de mascota")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Historiales encontrados",
+                content = @Content(schema = @Schema(implementation = HistorialClinico.class))),
+        @ApiResponse(responseCode = "404", description = "No se encontraron historiales para la mascota")
+    })
+    @GetMapping("/mascota/{idMascota}")
+    public ResponseEntity<List<HistorialClinico>> obtenerPorMascota(@PathVariable Long idMascota) {
+        List<HistorialClinico> historiales = historialClinicoService.obtenerPorMascotaId(idMascota);
+        if (historiales.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(historiales);
     }
 
 }

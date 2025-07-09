@@ -50,7 +50,7 @@ public class DireccionControllerTest {
         direccion.setCodigoPostal(12345);
         direccion.setUsuarioId(1L);
 
-        when(direccionService.save(any(Direccion.class))).thenReturn(direccion);
+        when(direccionService.save((Direccion) any(Direccion.class))).thenReturn(direccion);
 
         mockMvc.perform(post("/api/v1/direccion/direcciones")
                 .header("Authorization", TOKEN)

@@ -3,7 +3,9 @@ package com.Microservicios.Gestion.Comentarios.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.Microservicios.Gestion.Comentarios.dto.ComentarioRequest;
 import com.Microservicios.Gestion.Comentarios.model.Comentario;
@@ -52,8 +54,15 @@ public class ComentarioService {
     }
 
     public List<Comentario> obtenerPorUsuario(Long idUsuario) {
-        return comentarioRepository.findByIdUsuario(idUsuario);
+    try {
+        usuarioClient.obtenerUsuarioPorId(idUsuario); // Validar existencia
+    } catch (RuntimeException ex) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
+    return comentarioRepository.findByIdUsuario(idUsuario);
+    }
+
 
     public Map<String, Object> obtenerConUsuario(Long idUsuario) {
         Map<String, Object> usuario = usuarioClient.obtenerUsuarioPorId(idUsuario);

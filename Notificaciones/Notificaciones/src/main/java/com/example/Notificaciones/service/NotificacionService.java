@@ -1,6 +1,5 @@
 package com.example.Notificaciones.service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +21,11 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class NotificacionService {
 
-    @Autowired NotificacionRepository notificacionRepository;
+    @Autowired
+    NotificacionRepository notificacionRepository;
 
-    @Autowired UsuarioClient usuarioClient;
+    @Autowired
+    UsuarioClient usuarioClient;
 
     public Notificacion crearDesdeDTO(NotificacionRequest request, String correoCreador) {
         validarUsuarioExistente(request.getUsuarioId());
@@ -41,6 +42,13 @@ public class NotificacionService {
     public List<Notificacion> obtenerTodas() {
         return notificacionRepository.findAll();
     }
+
+    public Notificacion obtenerPorId(Long id) {
+    return notificacionRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND, "No se encontró la notificación con ID: " + id));
+    }
+
 
     public List<Notificacion> obtenerPorUsuario(Long usuarioId) {
         return notificacionRepository.findByUsuarioId(usuarioId);
@@ -66,15 +74,16 @@ public class NotificacionService {
                     return notificacionRepository.save(noti);
                 })
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Notificación no encontrada con ID: " + id));
+                HttpStatus.NOT_FOUND, "Notificación no encontrada con ID: " + id));
     }
 
-    private void validarUsuarioExistente(Long usuarioId) {
+    public void validarUsuarioExistente(Long usuarioId) {
         try {
             usuarioClient.obtenerUsuarioPorId(usuarioId);
         } catch (RuntimeException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "No se puede crear notificación: usuario con ID " + usuarioId + " no existe.");
+                    "No se puede crear notificación: usuario con ID " + usuarioId + " no existe.");
         }
     }
+
 }

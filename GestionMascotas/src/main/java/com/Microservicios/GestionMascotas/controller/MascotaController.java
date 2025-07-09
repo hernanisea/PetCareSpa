@@ -80,4 +80,16 @@ public class MascotaController {
         mascotasService.eliminarMascota(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Obtener todas las mascotas registradas")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de mascotas obtenida exitosamente",
+                content = @Content(schema = @Schema(implementation = MascotaResponseDto.class)))
+    })
+    @GetMapping
+    public ResponseEntity<List<MascotaResponseDto>> obtenerTodas() {
+        List<MascotaResponseDto> mascotas = mascotasService.obtenerTodasLasMascotas();
+        return ResponseEntity.ok(mascotas);
+    }
+
 }
