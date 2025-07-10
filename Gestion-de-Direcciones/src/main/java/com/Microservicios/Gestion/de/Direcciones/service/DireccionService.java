@@ -44,20 +44,21 @@ public class DireccionService {
     }
 
     public Direccion save(Direccion dto) {
-        validarUsuarioExistente(dto.getUsuarioId());
+    validarUsuarioExistente(dto.getUsuarioId());
 
-        Comuna comuna = comunaRepository.findById(direccion2.getIdComuna())
-                .orElseThrow(() -> new IllegalArgumentException("Comuna no encontrada con ID: " + dto.getIdComuna()));
+    Comuna comuna = comunaRepository.findById(dto.getComuna().getIdComuna())
+            .orElseThrow(() -> new IllegalArgumentException("Comuna no encontrada con ID: " + dto.getComuna().getIdComuna()));
 
-        Direccion direccion = new Direccion();
-        direccion.setCalle(direccion2.getCalle());
-        direccion.setDescripcion(dto.getDescripcion());
-        direccion.setCodigoPostal(direccion2.getCodigoPostal());
-        direccion.setUsuarioId(dto.getUsuarioId());
-        direccion.setComuna(comuna);
+    Direccion direccion = new Direccion();
+    direccion.setCalle(dto.getCalle());
+    direccion.setDescripcion(dto.getDescripcion());
+    direccion.setCodigoPostal(dto.getCodigoPostal());
+    direccion.setUsuarioId(dto.getUsuarioId());
+    direccion.setComuna(comuna);
 
-        return direccionRepository.save(direccion);
+    return direccionRepository.save(direccion);
     }
+
 
     public void delete(Long id) {
         direccionRepository.deleteById(id);

@@ -4,6 +4,8 @@ import com.Microservicios.GestionMascotas.dto.MascotaRequestDto;
 import com.Microservicios.GestionMascotas.dto.MascotaResponseDto;
 import com.Microservicios.GestionMascotas.service.MascotasService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -22,9 +25,8 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @WebMvcTest(MascotaController.class)
+@WithMockUser // Simula un usuario autenticado para evitar error 403
 public class MascotaControllerTest {
 
     @Autowired
@@ -98,9 +100,9 @@ public class MascotaControllerTest {
 
         List<MascotaResponseDto> mascotas = Arrays.asList(mascota1, mascota2);
 
-        when(mascotasService.obtenerPorUsuario(null)).thenReturn(mascotas);
+        when(mascotasService.obtenerPorUsuario(1L)).thenReturn(mascotas);
 
-        mockMvc.perform(get("/api/v1/mascotas"))
+        mockMvc.perform(get("/api/v1/mascotas/usuarios/1/mascotas"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }

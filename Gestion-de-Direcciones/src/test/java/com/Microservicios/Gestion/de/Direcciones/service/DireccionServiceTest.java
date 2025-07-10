@@ -1,58 +1,65 @@
 package com.Microservicios.Gestion.de.Direcciones.service;
 
-import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Microservicios.Gestion.de.Direcciones.dto.DireccionRequest;
 import com.Microservicios.Gestion.de.Direcciones.model.Comuna;
 import com.Microservicios.Gestion.de.Direcciones.model.Direccion;
+import com.Microservicios.Gestion.de.Direcciones.model.Region;
 import com.Microservicios.Gestion.de.Direcciones.repository.ComunaRepository;
 import com.Microservicios.Gestion.de.Direcciones.repository.DireccionRepository;
 import com.Microservicios.Gestion.de.Direcciones.webclient.UsuarioClient;
 
+@SpringBootTest
 public class DireccionServiceTest {
 
-    private DireccionRepository direccionRepo;
-    private UsuarioClient usuarioClient;
-    private ComunaRepository comunaRepo;
     private DireccionService direccionService;
+    private DireccionRepository direccionRepository;
+    private ComunaRepository comunaRepository;
+    private UsuarioClient usuarioClient;
+
+    private Comuna comuna;
 
     @BeforeEach
-    void setUp() {
-        direccionRepo = mock(DireccionRepository.class);
-        usuarioClient = mock(UsuarioClient.class);
-        comunaRepo = mock(ComunaRepository.class);
-        direccionService = new DireccionService(direccionRepo, usuarioClient, comunaRepo);
+    void setup() {
+        direccionRepository = Mockito.mock(DireccionRepository.class);
+        comunaRepository = Mockito.mock(ComunaRepository.class);
+        usuarioClient = Mockito.mock(UsuarioClient.class);
+
+        direccionService = new DireccionService(direccionRepository, usuarioClient, comunaRepository);
+
+        Region region = new Region(1L, "Región Test");
+        comuna = new Comuna(1L, "Comuna Test", region);
+
+        Mockito.when(comunaRepository.findById(1L)).thenReturn(Optional.of(comuna));
+        Mockito.when(usuarioClient.getUsuarioById(10L)).thenReturn(null);  // Simula que el usuario existe
     }
 
     @Test
-    void debeGuardarDireccionDesdeRequest() {
+    void guardarDireccionDesdeDTO() {
         DireccionRequest request = new DireccionRequest();
-        request.setCalle("Av. Test");
+        request.setCalle("Calle Falsa 123");
         request.setDescripcion("Depto A");
-        request.setCodigoPostal(12345);
-        request.setUsuarioId(1L);
+        request.setCodigoPostal(7500000);
+        request.setUsuarioId(10L);
         request.setIdComuna(1L);
 
-        Comuna comuna = new Comuna();
-        comuna.setIdComuna(1L);
-        comuna.setNombre("Comuna Test");
-
-        when(usuarioClient.getUsuarioById(1L)).thenReturn(Map.of("id", 1));
-        when(comunaRepo.findById(1L)).thenReturn(Optional.of(comuna));
-        when(direccionRepo.save(Mockito.any(Direccion.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+        // Mock del repositorio para simular guardado
+        Mockito.when(direccionRepository.save(Mockito.any(Direccion.class)))
+               .thenAnswer(invoc -> invoc.getArgument(0));
 
         Direccion direccion = direccionService.saveFromDto(request);
 
-        assertThat(direccion.getCalle()).isEqualTo("Av. Test");
+        assertThat(direccion.getCalle()).isEqualTo("Calle Falsa 123");
+        assertThat(direccion.getDescripcion()).isEqualTo("Depto A");
+        assertThat(direccion.getCodigoPostal()).isEqualTo(7500000);
+        assertThat(direccion.getUsuarioId()).isEqualTo(10L);
         assertThat(direccion.getComuna().getNombre()).isEqualTo("Comuna Test");
     }
 }
